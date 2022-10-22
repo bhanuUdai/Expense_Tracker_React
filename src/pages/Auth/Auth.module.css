@@ -25,3 +25,10 @@ form button{
     margin-top: 5%;
     font-size: 17px;
 }
+
+.toggleButton
+{
+    background-color: transparent;
+    border-color: transparent;
+    width: 15rem;
+}
