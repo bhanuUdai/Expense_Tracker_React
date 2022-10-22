@@ -1,0 +1,27 @@
+form{
+    display: flex;
+    flex-direction: column;
+    width: 30%;
+    margin: 10% auto;
+    padding: 4%;
+    border-radius: 10px;
+    border: 2px solid brown;
+}
+
+
+form input{
+    padding: 1.5%;
+    margin: 2% 0;
+}
+
+form h2{
+    margin: 0 auto;
+}
+
+form button{
+    padding: 2%;
+    width: 5rem;
+    margin: auto;
+    margin-top: 5%;
+    font-size: 17px;
+}
