@@ -1,14 +1,15 @@
 import axios from "axios";
-import React, { useRef, useState } from "react";
+import React, { useContext, useRef, useState } from "react";
 import classes from "./Auth.module.css";
-
+import ExpenseContext from "../../store/expense-context";
 import { useHistory } from "react-router-dom";
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const enteredEmailRef = useRef();
   const enteredPassRef = useRef();
   const enteredConfPassRef = useRef();
-  const history=useHistory()
+  const history = useHistory();
+  const expctx = useContext(ExpenseContext);
   const toggleAuthHandler = (event) => {
     event.preventDefault();
     setIsLogin(!isLogin);
@@ -29,7 +30,6 @@ const Auth = () => {
         returnSecureToken: true,
       };
 
-
       if (isLogin) {
         let res = await axios.post(
           "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
@@ -39,11 +39,10 @@ const Auth = () => {
           }
         );
         try {
-          history.replace('/welcome')
-          localStorage.setItem('ExpenseToken',res.data.idToken)
+          expctx.getExpenseToken(res.data.idToken);
+          history.replace("/welcome");
           enteredEmailRef.current.value = "";
           enteredPassRef.current.value = "";
-          
         } catch (err) {
           console.log(err);
         }

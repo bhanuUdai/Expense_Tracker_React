@@ -18,20 +18,28 @@ const ContactDetails = () => {
         returnSecureToken: true,
       };
 
-      const res = await axios.post(
-        "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
-        contactObj,
-        {
-          headers: { "Content-Type": "application/json" },
-        }
-      );
-      try {
-        console.log(res);
-        userNameRef.current.value='';
-        userProfileUrlRef.current.value='';
-      } catch (err) {
-        console.log(err);
+      if(userName.trim().length>0 && userProfile.trim().length>0)
+      {
+        const res = await axios.post(
+            "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
+            contactObj,
+            {
+              headers: { "Content-Type": "application/json" },
+            }
+          );
+          try {
+            console.log(res);
+            userNameRef.current.value='';
+            userProfileUrlRef.current.value='';
+          } catch (err) {
+            console.log(err);
+          }
       }
+      else{
+        alert('Fill all the fields')
+      }
+
+     
     } catch (err) {
       console.log(err);
     }
@@ -42,9 +50,9 @@ const ContactDetails = () => {
       <form>
         <h4>Contact Details</h4>
         <label htmlFor="name">Full Name</label>
-        <input ref={userNameRef} type="text" id="name"></input>
+        <input required ref={userNameRef} type="text" id="name"></input>
         <label htmlFor="url_">Profile Photo URL</label>
-        <input ref={userProfileUrlRef} type="url" id="url_"></input>
+        <input required ref={userProfileUrlRef} type="url" id="url_"></input>
         <div className={classes.button_div}>
           <button onClick={detailSubmithandler} className={classes.update_btn}>update</button>
           <button className={classes.cancel_button}>cancel</button>

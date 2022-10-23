@@ -16,3 +16,11 @@
     background-color: rgba(245, 16, 16, 0.76);
     border: 1px solid goldenrod;
 }
+
+.update_btn:hover{
+    background-color: green;
+}
+
+.cancel_button:hover{
+    background-color: red;
+}
