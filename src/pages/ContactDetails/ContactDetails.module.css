@@ -1,0 +1,18 @@
+.button_div{
+    display: flex;
+}
+
+.update_btn{
+    margin-left: 1%;
+    border-radius: 15px;
+    background-color: rgb(66, 182, 66);
+    border: 1px solid goldenrod;
+}
+
+
+.cancel_button{
+    margin-right: 1%;
+    border-radius: 15px;
+    background-color: rgba(245, 16, 16, 0.76);
+    border: 1px solid goldenrod;
+}

@@ -3,3 +3,16 @@
     font-family: none;
     padding: 1%;
 }
+.main{
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+}
+
+.main div{
+    margin-right: 3%;
+}
+
+.link{
+    color: rgb(64, 226, 43);
+}
