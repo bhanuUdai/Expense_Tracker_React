@@ -14,3 +14,12 @@
 .header ul li{
     font-weight: bold;
 }
+
+.logout_button{
+    margin-top: 16%;
+    height: 30px;
+    border: 1px solid #f7f7f7;
+    color: white;
+    background-color: black;
+    border-radius: 14px;
+}

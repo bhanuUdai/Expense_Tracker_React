@@ -18,6 +18,12 @@ const ContextProvier = (prop) => {
     setPhotoUrl(data.url);
   }
 
+  const logOutHandler=()=>
+  {
+    setTokenId();
+    localStorage.removeItem("ExpenseToken")
+  }
+
   return (
     <ExpenseContext.Provider
       value={{
@@ -25,7 +31,8 @@ const ContextProvier = (prop) => {
         ExpenseToken: tokenId,
         userDetails: userDetaisHandler,
         userName:name,
-        profileUrl:photoUrl
+        profileUrl:photoUrl,
+        logOut:logOutHandler
       }}
     >
       {prop.children}
