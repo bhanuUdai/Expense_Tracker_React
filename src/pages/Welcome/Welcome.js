@@ -10,6 +10,10 @@ const Welcome=()=>
             <span>Your profile is incomplete. </span>
             <NavLink className={classes.link} to='/contact'>Complete now</NavLink>
         </div>
+        <div>
+            <span>Have you verified your Email ? if not click </span>
+            <NavLink className={classes.link} to='/verifymail'>here</NavLink>
+        </div>
         </main>
     </React.Fragment>)
 }
