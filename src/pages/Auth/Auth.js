@@ -3,6 +3,8 @@ import React, { useContext, useRef, useState } from "react";
 import classes from "./Auth.module.css";
 import ExpenseContext from "../../store/expense-context";
 import { useHistory } from "react-router-dom";
+import { Route } from "react-router-dom";
+import ForgetPassword from "./ForgetPassword";
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const enteredEmailRef = useRef();
@@ -83,6 +85,15 @@ const Auth = () => {
     }
   };
 
+  const forgetpasswordhandler=(event)=>
+  {
+    event.preventDefault();
+    history.push('/forget_pass')
+  }
+  <Route path='/forget_pass'>
+          <ForgetPassword/>
+        </Route>
+
   return (
     <React.Fragment>
       <form className={classes.form}>
@@ -106,6 +117,7 @@ const Auth = () => {
           ></input>
         )}
         <button onClick={submitHandler}>{isLogin ? "Login" : "Sign Up"}</button>
+        {isLogin && <button onClick={forgetpasswordhandler} className={classes.toggleButton} >Forget Your Password? </button>}
         <button onClick={toggleAuthHandler} className={classes.toggleButton}>
           {isLogin ? "Create new account" : "Already have account?"}
         </button>

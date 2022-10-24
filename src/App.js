@@ -6,6 +6,7 @@ import { Switch, Route } from "react-router-dom";
 import Contact from "./pages/Contact";
 import VerifyEmail from "./pages/Auth/VerifyEmail";
 import VerifyLinkSend from "./pages/Auth/VerifyLinkSend";
+import ForgetPassword from "./pages/Auth/ForgetPassword";
 function App() {
   return (
     <React.Fragment>
@@ -25,6 +26,9 @@ function App() {
         </Route>
         <Route path='/linksend'>
           <VerifyLinkSend/>
+        </Route>
+        <Route path='/forget_pass'>
+          <ForgetPassword/>
         </Route>
       </Switch>
     </React.Fragment>
