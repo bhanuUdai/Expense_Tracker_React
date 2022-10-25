@@ -1,0 +1,30 @@
+.main{
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid blue;
+}
+
+.main span{
+    display: flex;
+   
+}
+.main span h3{
+    padding: 0 10px;
+    color: rgb(161, 0, 0);
+}
+
+.items{
+    font-weight: inherit;
+    color: rgba(196, 18, 18, 0.788);
+    padding: 0 10px;
+    margin: auto;
+    font-style: italic;
+}
+
+.heading{
+    display: flex;
+    justify-content: center;
+    color: #ff000c;
+}
+
+

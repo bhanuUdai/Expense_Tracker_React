@@ -1,0 +1,16 @@
+.section{
+    width: 50%;
+    margin: auto;
+    margin-bottom: 15%;
+}
+
+.select{
+    padding: 1.5%;
+    margin-top: 9px;
+}
+
+.heading{
+    display: flex;
+    justify-content: center;
+    color: red;
+}

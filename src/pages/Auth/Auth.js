@@ -5,6 +5,7 @@ import ExpenseContext from "../../store/expense-context";
 import { useHistory } from "react-router-dom";
 import { Route } from "react-router-dom";
 import ForgetPassword from "./ForgetPassword";
+import useHttp from "../../hook/useHttp";
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
   const enteredEmailRef = useRef();
@@ -12,6 +13,7 @@ const Auth = () => {
   const enteredConfPassRef = useRef();
   const history = useHistory();
   const expctx = useContext(ExpenseContext);
+  const {error,postRequest}=useHttp()
   const toggleAuthHandler = (event) => {
     event.preventDefault();
     setIsLogin(!isLogin);
@@ -33,21 +35,16 @@ const Auth = () => {
       };
 
       if (isLogin) {
-        let res = await axios.post(
-          "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
-          authObj,
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        try {
+
+        const resData=(res)=>
+        {
           expctx.getExpenseToken(res.data.idToken);
           history.replace("/welcome");
           enteredEmailRef.current.value = "";
           enteredPassRef.current.value = "";
-        } catch (err) {
-          console.log(err);
         }
+
+        postRequest({url:"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",body:authObj,header:{ "Content-Type": "application/json" }},resData)
       } else {
         if (
           enteredEmail.trim().length === 0 ||
@@ -63,21 +60,18 @@ const Auth = () => {
           enteredPass.trim().length > 0 &&
           enteredConfPass.trim().length > 0
         ) {
-          let res = await axios.post(
-            "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
-            authObj,
-            {
-              headers: { "Content-Type": "application/json" },
-            }
-          );
-          try {
+
+          const resData=(res)=>
+          {
             console.log(res);
             enteredEmailRef.current.value = "";
             enteredPassRef.current.value = "";
             enteredConfPassRef.current.value = "";
-          } catch (err) {
-            console.log(err);
+            alert("New Account created successfully")
+            setIsLogin(true)
           }
+
+          postRequest({url:"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",body:authObj,header:{ "Content-Type": "application/json" }},resData)
         }
       }
     } catch (err) {
@@ -96,6 +90,7 @@ const Auth = () => {
 
   return (
     <React.Fragment>
+      {error && <h1 className={classes.error_tag}>{error}</h1>}
       <form className={classes.form}>
         <h2>{isLogin ? "Login" : "Sign Up"}</h2>
         <label htmlFor="mail">EMail</label>

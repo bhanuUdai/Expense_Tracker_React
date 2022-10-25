@@ -1,10 +1,12 @@
 import React, { useRef } from "react";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
+import useHttp from "../../hook/useHttp";
 
 const ForgetPassword = () => {
+  const { error, postRequest } = useHttp();
   const enteredEmailRef = useRef();
-  const history=useHistory()
+  const history = useHistory();
   const changePasshandler = async (event) => {
     event.preventDefault();
     const passObj = {
@@ -12,20 +14,19 @@ const ForgetPassword = () => {
       email: enteredEmailRef.current.value,
     };
     try {
-      const res = await axios.post(
-        "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
-        passObj,
+      const resdata = () => {
+        alert("Password reset link successfully send to your given email");
+        history.replace("/");
+      };
+
+      postRequest(
         {
-          headers: { "Content-Type": "application/json" },
-        }
+          url: "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
+          body: passObj,
+          header: { "Content-Type": "application/json" },
+        },
+        resdata
       );
-      try {
-        console.log(res);
-        alert('Password reset link successfully send to your given email')
-        history.replace('/')
-      } catch (err) {
-        alert(err);
-      }
     } catch (err) {
       console.log(err);
       alert(err);
@@ -39,6 +40,7 @@ const ForgetPassword = () => {
       </h3>
       <input ref={enteredEmailRef} type="email" id="enter_email"></input>
       <button onClick={changePasshandler}>Submit</button>
+      {error && <h3>{`${error}!!!`}</h3>}
     </form>
   );
 };

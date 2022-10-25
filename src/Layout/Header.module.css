@@ -23,3 +23,11 @@
     background-color: black;
     border-radius: 14px;
 }
+
+.expense{
+    margin-top: 1%;
+}
+
+.expense_link{
+    color: red;
+}

@@ -3,3 +3,8 @@
     background-color: darkseagreen;
     border-radius: 20px;
 }
+
+.error_tag{
+    display: flex;
+    justify-content: center;
+}

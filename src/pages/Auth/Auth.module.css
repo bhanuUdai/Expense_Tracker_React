@@ -32,3 +32,8 @@ form button{
     border-color: transparent;
     width: 15rem;
 }
+
+.error_tag{
+    display: flex;
+    justify-content: center;
+}
