@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useContext, useRef, useState } from "react";
 import classes from "./Auth.module.css";
 import ExpenseContext from "../../store/expense-context";
@@ -13,7 +12,7 @@ const Auth = () => {
   const enteredConfPassRef = useRef();
   const history = useHistory();
   const expctx = useContext(ExpenseContext);
-  const {error,sendRequest}=useHttp()
+  const { error, sendRequest } = useHttp();
   const toggleAuthHandler = (event) => {
     event.preventDefault();
     setIsLogin(!isLogin);
@@ -35,16 +34,22 @@ const Auth = () => {
       };
 
       if (isLogin) {
-
-        const resData=(res)=>
-        {
+        const resData = (res) => {
           expctx.getExpenseToken(res.data.idToken);
           history.replace("/welcome");
           enteredEmailRef.current.value = "";
           enteredPassRef.current.value = "";
-        }
+        };
 
-        sendRequest({request:'post',url:"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",body:authObj,header:{ "Content-Type": "application/json" }},resData)
+        sendRequest(
+          {
+            request: "post",
+            url: "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
+            body: authObj,
+            header: { "Content-Type": "application/json" },
+          },
+          resData
+        );
       } else {
         if (
           enteredEmail.trim().length === 0 ||
@@ -60,18 +65,24 @@ const Auth = () => {
           enteredPass.trim().length > 0 &&
           enteredConfPass.trim().length > 0
         ) {
-
-          const resData=(res)=>
-          {
+          const resData = (res) => {
             console.log(res);
             enteredEmailRef.current.value = "";
             enteredPassRef.current.value = "";
             enteredConfPassRef.current.value = "";
-            alert("New Account created successfully")
-            setIsLogin(true)
-          }
+            alert("New Account created successfully");
+            setIsLogin(true);
+          };
 
-          sendRequest({request:'post',url:"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",body:authObj,header:{ "Content-Type": "application/json" }},resData)
+          sendRequest(
+            {
+              request: "post",
+              url: "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
+              body: authObj,
+              header: { "Content-Type": "application/json" },
+            },
+            resData
+          );
         }
       }
     } catch (err) {
@@ -79,14 +90,13 @@ const Auth = () => {
     }
   };
 
-  const forgetpasswordhandler=(event)=>
-  {
+  const forgetpasswordhandler = (event) => {
     event.preventDefault();
-    history.push('/forget_pass')
-  }
-  <Route path='/forget_pass'>
-          <ForgetPassword/>
-        </Route>
+    history.push("/forget_pass");
+  };
+  <Route path="/forget_pass">
+    <ForgetPassword />
+  </Route>;
 
   return (
     <React.Fragment>
@@ -112,7 +122,14 @@ const Auth = () => {
           ></input>
         )}
         <button onClick={submitHandler}>{isLogin ? "Login" : "Sign Up"}</button>
-        {isLogin && <button onClick={forgetpasswordhandler} className={classes.toggleButton} >Forget Your Password? </button>}
+        {isLogin && (
+          <button
+            onClick={forgetpasswordhandler}
+            className={classes.toggleButton}
+          >
+            Forget Your Password?{" "}
+          </button>
+        )}
         <button onClick={toggleAuthHandler} className={classes.toggleButton}>
           {isLogin ? "Create new account" : "Already have account?"}
         </button>

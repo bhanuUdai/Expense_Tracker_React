@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useContext } from "react";
 import ExpenseContext from "../../store/expense-context";
 import { useHistory } from "react-router-dom";

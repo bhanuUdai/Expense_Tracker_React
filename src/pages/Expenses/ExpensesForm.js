@@ -1,12 +1,37 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import Expenses from "./Expenses";
 import classes from "./ExpensesForm.module.css";
+import useHttp from "../../hook/useHttp";
 const ExpensesForm = () => {
   const [initArr, setArr] = useState([]);
 
   const enteredAmountRef = useRef();
   const enteredDesRef = useRef();
   const enteredCatRef = useRef();
+  const { error, sendRequest } = useHttp();
+
+  useEffect(() => {
+    const resData = (res) => {
+      let arr = [];
+      for (const prop in res.data) {
+        arr.push({
+          Id: prop,
+          amount: res.data[prop].amount,
+          category: res.data[prop].category,
+          description: res.data[prop].description,
+        });
+      }
+      setArr(arr)
+    };
+    sendRequest(
+      {
+        request: "get",
+        url: "https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/expense.json",
+        header: { "Content-Type": "application/json " },
+      },
+      resData
+    );
+  }, [sendRequest]);
 
   const addExpenseHandler = (event) => {
     event.preventDefault();
@@ -27,17 +52,30 @@ const ExpensesForm = () => {
     ) {
       alert("Fill all inputs before submit");
     } else {
-      setArr([...initArr, expenseObj]);
+      const resData = (res) => {
+        const expenseObjWithId = { ...expenseObj, Id: res.data.name };
+        setArr([...initArr, expenseObjWithId]);
+      };
+
+      sendRequest(
+        {
+          request: "post",
+          url: "https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/expense.json",
+          body: expenseObj,
+          header: { "Content-Type": "application/json " },
+        },
+        resData
+      );
     }
 
     enteredAmountRef.current.value = "";
     enteredDesRef.current.value = "";
     enteredCatRef.current.value = "";
   };
-  console.log(initArr);
 
   return (
     <React.Fragment>
+      {error && <h1>{error}</h1>}
       <form>
         <h1>Expenses Form</h1>
         <label htmlFor="money">Amount</label>
@@ -58,10 +96,7 @@ const ExpensesForm = () => {
         <h2 className={classes.heading}>Your Expenses</h2>
         {initArr.length > 0 &&
           initArr.map((obj) => {
-            {
-              console.log("hloo");
-            }
-            return <Expenses items={obj} />;
+            return <Expenses key={Math.random()} items={obj} />;
           })}
       </section>
     </React.Fragment>
