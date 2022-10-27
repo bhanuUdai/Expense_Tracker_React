@@ -1,5 +1,5 @@
 .section{
-    width: 50%;
+    width: 65%;
     margin: auto;
     margin-bottom: 15%;
 }
@@ -13,4 +13,8 @@
     display: flex;
     justify-content: center;
     color: red;
+}
+.error_heading{
+    display: flex;
+    justify-content: center;
 }

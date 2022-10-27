@@ -26,5 +26,20 @@
     justify-content: center;
     color: #ff000c;
 }
-
+.edit_button{
+    height: 30px;
+    margin-top: 3%;
+    margin-left: 1%;
+    margin-right: 2%;
+    background-color: rgba(0, 128, 0, 0.76);
+    border-radius: 5px;
+}
+.delete_button{
+    height: 30px;
+    margin-top: 3%;
+    margin-left: 1%;
+    margin-right: 2%;
+    background-color: rgba(255, 0, 0, 0.801);
+    border-radius: 5px;
+}
 

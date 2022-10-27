@@ -4,7 +4,7 @@ import classes from "./ExpensesForm.module.css";
 import useHttp from "../../hook/useHttp";
 const ExpensesForm = () => {
   const [initArr, setArr] = useState([]);
-
+  const [isEditId, setIsEditId] = useState(null);
   const enteredAmountRef = useRef();
   const enteredDesRef = useRef();
   const enteredCatRef = useRef();
@@ -21,7 +21,7 @@ const ExpensesForm = () => {
           description: res.data[prop].description,
         });
       }
-      setArr(arr)
+      setArr(arr);
     };
     sendRequest(
       {
@@ -32,6 +32,32 @@ const ExpensesForm = () => {
       resData
     );
   }, [sendRequest]);
+
+  const editButtonHandler = (data) => {
+    let filteredArr = initArr.filter((arr) => arr.Id !== data.Id);
+    setArr(filteredArr);
+    enteredAmountRef.current.value = data.amount;
+    enteredDesRef.current.value = data.description;
+    enteredCatRef.current.value = data.category;
+    setIsEditId(data.Id);
+  };
+
+  const deleteButtonHandler = (data) => {
+    console.log(data);
+    const resData = () => {
+      let filteredArr = initArr.filter((arr) => arr.Id !== data);
+      setArr(filteredArr);
+    };
+
+    sendRequest(
+      {
+        request: "delete",
+        url: `https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/expense/${data}.json`,
+        header: { "Content-Type": "application/json " },
+      },
+      resData
+    );
+  };
 
   const addExpenseHandler = (event) => {
     event.preventDefault();
@@ -52,20 +78,39 @@ const ExpensesForm = () => {
     ) {
       alert("Fill all inputs before submit");
     } else {
-      const resData = (res) => {
-        const expenseObjWithId = { ...expenseObj, Id: res.data.name };
-        setArr([...initArr, expenseObjWithId]);
-      };
+      if (isEditId === null) {
+        console.log("post");
+        const resData = (res) => {
+          const expenseObjWithId = { ...expenseObj, Id: res.data.name };
+          setArr([...initArr, expenseObjWithId]);
+        };
 
-      sendRequest(
-        {
-          request: "post",
-          url: "https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/expense.json",
-          body: expenseObj,
-          header: { "Content-Type": "application/json " },
-        },
-        resData
-      );
+        sendRequest(
+          {
+            request: "post",
+            url: "https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/expense.json",
+            body: expenseObj,
+            header: { "Content-Type": "application/json " },
+          },
+          resData
+        );
+      } else {
+        const resEditData = (data) => {
+          console.log(data, "put data");
+          setArr([...initArr, data.data]);
+          setIsEditId(null);
+        };
+
+        sendRequest(
+          {
+            request: "put",
+            url: `https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/expense/${isEditId}.json`,
+            body: expenseObj,
+            header: { "Content-Type": "application/json " },
+          },
+          resEditData
+        );
+      }
     }
 
     enteredAmountRef.current.value = "";
@@ -75,7 +120,7 @@ const ExpensesForm = () => {
 
   return (
     <React.Fragment>
-      {error && <h1>{error}</h1>}
+      {error && <h1 className={classes.error_heading}>{`${error}!!! :(`}</h1>}
       <form>
         <h1>Expenses Form</h1>
         <label htmlFor="money">Amount</label>
@@ -96,7 +141,14 @@ const ExpensesForm = () => {
         <h2 className={classes.heading}>Your Expenses</h2>
         {initArr.length > 0 &&
           initArr.map((obj) => {
-            return <Expenses key={Math.random()} items={obj} />;
+            return (
+              <Expenses
+                key={Math.random()}
+                items={obj}
+                editButtonClicked={editButtonHandler}
+                deleteButtonClicked={deleteButtonHandler}
+              />
+            );
           })}
       </section>
     </React.Fragment>
