@@ -5,7 +5,7 @@ import { useHistory } from "react-router-dom";
 import classes from "./VerifyEmail.module.css";
 import useHttp from "../../hook/useHttp";
 const VerifyEmail = () => {
-  const { error, postRequest } = useHttp();
+  const { error, sendRequest } = useHttp();
   const expctx = useContext(ExpenseContext);
   const history = useHistory();
   const verifyMailHandler = async (event) => {
@@ -20,9 +20,10 @@ const VerifyEmail = () => {
         history.push("/linksend");
       };
 
-      postRequest(
+      sendRequest(
         {
-          url: "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCod?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
+          request:'post',
+          url: "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
           body: verifyObj,
           header: { "Content-Type": "X-Firebase-Locale" },
         },

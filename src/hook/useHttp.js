@@ -4,10 +4,10 @@ import React, { useState, useCallback } from "react";
 const useHttp = () => {
   const [error, setError] = useState(null);
 
-  const postRequest = useCallback(async (requestConfig, resData) => {
+  const sendRequest = useCallback(async (requestConfig, resData) => {
     setError(null);
     try {
-      const res = await axios.post(requestConfig.url, requestConfig.body, {
+      const res = await axios[requestConfig.request](requestConfig.url, requestConfig.body?requestConfig.body:null, {
         headers: requestConfig.header,
       });
       console.log(res);
@@ -18,6 +18,6 @@ const useHttp = () => {
     }
   }, []);
 
-  return { error, postRequest };
+  return { error, sendRequest };
 };
 export default useHttp;

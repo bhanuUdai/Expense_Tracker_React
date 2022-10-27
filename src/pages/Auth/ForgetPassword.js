@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import useHttp from "../../hook/useHttp";
 
 const ForgetPassword = () => {
-  const { error, postRequest } = useHttp();
+  const { error, sendRequest } = useHttp();
   const enteredEmailRef = useRef();
   const history = useHistory();
   const changePasshandler = async (event) => {
@@ -19,8 +19,9 @@ const ForgetPassword = () => {
         history.replace("/");
       };
 
-      postRequest(
+      sendRequest(
         {
+          request:'post',
           url: "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
           body: passObj,
           header: { "Content-Type": "application/json" },

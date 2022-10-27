@@ -13,7 +13,7 @@ const Auth = () => {
   const enteredConfPassRef = useRef();
   const history = useHistory();
   const expctx = useContext(ExpenseContext);
-  const {error,postRequest}=useHttp()
+  const {error,sendRequest}=useHttp()
   const toggleAuthHandler = (event) => {
     event.preventDefault();
     setIsLogin(!isLogin);
@@ -44,7 +44,7 @@ const Auth = () => {
           enteredPassRef.current.value = "";
         }
 
-        postRequest({url:"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",body:authObj,header:{ "Content-Type": "application/json" }},resData)
+        sendRequest({request:'post',url:"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",body:authObj,header:{ "Content-Type": "application/json" }},resData)
       } else {
         if (
           enteredEmail.trim().length === 0 ||
@@ -71,7 +71,7 @@ const Auth = () => {
             setIsLogin(true)
           }
 
-          postRequest({url:"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",body:authObj,header:{ "Content-Type": "application/json" }},resData)
+          sendRequest({request:'post',url:"https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",body:authObj,header:{ "Content-Type": "application/json" }},resData)
         }
       }
     } catch (err) {

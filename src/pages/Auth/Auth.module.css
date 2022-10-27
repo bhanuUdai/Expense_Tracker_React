@@ -24,6 +24,8 @@ form button{
     margin: auto;
     margin-top: 5%;
     font-size: 17px;
+    background-color: rgba(37, 37, 224, 0.397);
+    border-radius: 8px;
 }
 
 .toggleButton
