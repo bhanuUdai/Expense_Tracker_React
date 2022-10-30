@@ -2,13 +2,17 @@ import React, { useRef, useState, useEffect } from "react";
 import Expenses from "./Expenses";
 import classes from "./ExpensesForm.module.css";
 import useHttp from "../../hook/useHttp";
+import { useDispatch, useSelector } from "react-redux";
+import { expenseAction } from "../../store/expense-reducer";
 const ExpensesForm = () => {
-  const [initArr, setArr] = useState([]);
+  const expenseArr = useSelector((state) => state.expense.expenses);
+
   const [isEditId, setIsEditId] = useState(null);
   const enteredAmountRef = useRef();
   const enteredDesRef = useRef();
   const enteredCatRef = useRef();
   const { error, sendRequest } = useHttp();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const resData = (res) => {
@@ -21,7 +25,9 @@ const ExpensesForm = () => {
           description: res.data[prop].description,
         });
       }
-      setArr(arr);
+      console.log(arr);
+      dispatch(expenseAction.updateExpense(arr));
+      // setArr(arr);
     };
     sendRequest(
       {
@@ -34,8 +40,9 @@ const ExpensesForm = () => {
   }, [sendRequest]);
 
   const editButtonHandler = (data) => {
-    let filteredArr = initArr.filter((arr) => arr.Id !== data.Id);
-    setArr(filteredArr);
+    let filteredArr = expenseArr.filter((arr) => arr.Id !== data.Id);
+    dispatch(expenseAction.updateExpense(filteredArr));
+    //setArr(filteredArr);
     enteredAmountRef.current.value = data.amount;
     enteredDesRef.current.value = data.description;
     enteredCatRef.current.value = data.category;
@@ -45,8 +52,9 @@ const ExpensesForm = () => {
   const deleteButtonHandler = (data) => {
     console.log(data);
     const resData = () => {
-      let filteredArr = initArr.filter((arr) => arr.Id !== data);
-      setArr(filteredArr);
+      let filteredArr = expenseArr.filter((arr) => arr.Id !== data);
+      dispatch(expenseAction.updateExpense(filteredArr));
+      //setArr(filteredArr);
     };
 
     sendRequest(
@@ -82,7 +90,10 @@ const ExpensesForm = () => {
         console.log("post");
         const resData = (res) => {
           const expenseObjWithId = { ...expenseObj, Id: res.data.name };
-          setArr([...initArr, expenseObjWithId]);
+          dispatch(
+            expenseAction.updateExpense([...expenseArr, expenseObjWithId])
+          );
+          //setArr([...expenseArr, expenseObjWithId]);
         };
 
         sendRequest(
@@ -97,7 +108,8 @@ const ExpensesForm = () => {
       } else {
         const resEditData = (data) => {
           console.log(data, "put data");
-          setArr([...initArr, data.data]);
+          dispatch(expenseAction.updateExpense([...expenseArr, data.data]));
+          //setArr([...expenseArr, data.data]);
           setIsEditId(null);
         };
 
@@ -118,6 +130,22 @@ const ExpensesForm = () => {
     enteredCatRef.current.value = "";
   };
 
+  let premimum;
+  if (expenseArr.length > 0) {
+    let totalAmount = expenseArr.reduce((prev, current) => {
+      return prev + Number(current.amount);
+    }, 0);
+
+    console.log(totalAmount);
+    if(totalAmount>1000)
+    {
+      premimum=true
+    }
+    else{
+      premimum=false
+    }
+  }
+
   return (
     <React.Fragment>
       {error && <h1 className={classes.error_heading}>{`${error}!!! :(`}</h1>}
@@ -135,12 +163,15 @@ const ExpensesForm = () => {
           <option value="fruits">Fruits</option>
           <option value="vegitables">Vegitables</option>
         </select>
-        <button onClick={addExpenseHandler}>Submit</button>
+        <button className={classes.submit_button} onClick={addExpenseHandler}>
+          Submit
+        </button>
+       {premimum && <h4>Your expenses amount exceed more then $1000, go from premimum</h4>}
       </form>
       <section className={classes.section}>
         <h2 className={classes.heading}>Your Expenses</h2>
-        {initArr.length > 0 &&
-          initArr.map((obj) => {
+        {expenseArr.length > 0 &&
+          expenseArr.map((obj) => {
             return (
               <Expenses
                 key={Math.random()}

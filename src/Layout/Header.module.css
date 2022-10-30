@@ -1,33 +1,42 @@
-.header{
-    color: rgb(204, 66, 66);
-    background-color: black;
+.header {
+  color: rgb(204, 66, 66);
+  background-color: black;
 }
 
-.header ul{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-    list-style-type: none;
-    margin: 0;
+.header ul {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  list-style-type: none;
+  margin: 0;
 }
 
-.header ul li{
-    font-weight: bold;
+.header ul li {
+  font-weight: bold;
 }
 
-.logout_button{
-    margin-top: 16%;
-    height: 30px;
-    border: 1px solid #f7f7f7;
-    color: white;
-    background-color: black;
-    border-radius: 14px;
+.logout_button {
+  margin-top: 16%;
+  height: 30px;
+  border: 1px solid #f7f7f7;
+  color: white;
+  background-color: black;
+  border-radius: 14px;
 }
 
-.expense{
-    margin-top: 1%;
+.expense {
+  margin-top: 1%;
 }
 
-.expense_link{
-    color: red;
+.expense_link {
+  color: brown;
+  text-decoration: none;
+}
+
+.expense_active {
+  color: green;
+}
+
+.logout_button:hover {
+  background-color: rgb(221, 10, 10);
 }

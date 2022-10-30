@@ -1,12 +1,14 @@
-import React, { useContext } from "react";
+import React from "react";
 import classes from "./Header.module.css";
-import ExpenseContext from "../store/expense-context";
 import { NavLink, useHistory } from "react-router-dom";
+import { useSelector,useDispatch } from "react-redux";
+import { authAction } from "../store/auth-reducer";
 const Header = () => {
-  const expctx = useContext(ExpenseContext);
+  const isLogin=useSelector(state=>state.auth.token)
+  const dispatch=useDispatch()
   const history = useHistory();
   const userlogOuthandler = () => {
-    expctx.logOut();
+    dispatch(authAction.removeExpenseToken())
     history.replace("/");
   };
 
@@ -18,10 +20,10 @@ const Header = () => {
             <p>Home</p>
           </li>
           <li className={classes.expense} >
-            <NavLink className={classes.expense_link} to="/expenses">Expenses</NavLink>
+            <NavLink className={classes.expense_link} activeClassName={classes.expense_active} to="/expenses">Expenses</NavLink>
           </li>
           <li>
-            {expctx.ExpenseToken && <button
+            {isLogin && <button
               onClick={userlogOuthandler}
               className={classes.logout_button}
             >

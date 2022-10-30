@@ -43,3 +43,10 @@
     border-radius: 5px;
 }
 
+.edit_button:hover{
+    background-color: green;
+}
+
+.delete_button:hover{
+    background-color: red;
+}

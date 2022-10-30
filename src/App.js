@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import Header from "./Layout/Header";
 import Auth from "./pages/Auth/Auth";
 import Welcome from "./pages/Welcome/Welcome";
@@ -7,10 +7,10 @@ import Contact from "./pages/Contact";
 import VerifyEmail from "./pages/Auth/VerifyEmail";
 import VerifyLinkSend from "./pages/Auth/VerifyLinkSend";
 import ForgetPassword from "./pages/Auth/ForgetPassword";
-import ExpenseContext from "./store/expense-context";
 import ExpensesForm from "./pages/Expenses/ExpensesForm";
+import {useSelector} from 'react-redux'
 function App() {
-  const expctx=useContext(ExpenseContext)
+  const isLogin=useSelector(state=>state.auth.token)
   return (
     <React.Fragment>
       <Header />
@@ -34,8 +34,8 @@ function App() {
           <ForgetPassword/>
         </Route>
          <Route path="/expenses">
-         {expctx.ExpenseToken && <ExpensesForm/>}
-         {!expctx.ExpenseToken && <Redirect to="/" />}
+         {isLogin && <ExpensesForm/>}
+         {!isLogin && <Redirect to="/" />}
         </Route>
       </Switch>
     </React.Fragment>

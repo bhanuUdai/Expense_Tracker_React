@@ -3,12 +3,14 @@ import ExpenseContext from "../store/expense-context";
 import ContactDetails from "./ContactDetails/ContactDetails";
 import SavedContact from "./SavedContact/SavedContact";
 import axios from "axios";
+import { useSelector } from "react-redux";
 const Contact =()=>
 {
     const [contactPage,setContactPage]=useState(null)
+    const token=useSelector(state=>state.auth.token)
     const expctx=useContext(ExpenseContext)
     const tokenObj = {
-        idToken: expctx.ExpenseToken,
+        idToken: token,
       };
     
       useEffect(() => {

@@ -1,18 +1,18 @@
-import React, { useContext } from "react";
-import ExpenseContext from "../../store/expense-context";
+import React from "react";
 import { useHistory } from "react-router-dom";
 import classes from "./VerifyEmail.module.css";
 import useHttp from "../../hook/useHttp";
+import { useSelector } from "react-redux";
 const VerifyEmail = () => {
   const { error, sendRequest } = useHttp();
-  const expctx = useContext(ExpenseContext);
+  const token=useSelector(state=>state.auth.token)
   const history = useHistory();
   const verifyMailHandler = async (event) => {
     event.preventDefault();
     try {
       const verifyObj = {
         requestType: "VERIFY_EMAIL",
-        idToken: expctx.ExpenseToken,
+        idToken: token,
       };
 
       const resData = () => {
