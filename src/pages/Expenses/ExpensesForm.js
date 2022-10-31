@@ -4,9 +4,10 @@ import classes from "./ExpensesForm.module.css";
 import useHttp from "../../hook/useHttp";
 import { useDispatch, useSelector } from "react-redux";
 import { expenseAction } from "../../store/expense-reducer";
+import { themeAction } from "../../store/theme-reducer";
 const ExpensesForm = () => {
   const expenseArr = useSelector((state) => state.expense.expenses);
-
+  const premium = useSelector((state) => state.expense.premium);
   const [isEditId, setIsEditId] = useState(null);
   const enteredAmountRef = useRef();
   const enteredDesRef = useRef();
@@ -130,21 +131,23 @@ const ExpensesForm = () => {
     enteredCatRef.current.value = "";
   };
 
-  let premimum;
   if (expenseArr.length > 0) {
     let totalAmount = expenseArr.reduce((prev, current) => {
       return prev + Number(current.amount);
     }, 0);
 
     console.log(totalAmount);
-    if(totalAmount>1000)
-    {
-      premimum=true
-    }
-    else{
-      premimum=false
+    if (totalAmount > 1000) {
+      dispatch(expenseAction.setPremium());
+    } else {
+      dispatch(expenseAction.unSetPremium());
     }
   }
+
+  const premiumHAndler = (event) => {
+    event.preventDefault();
+    dispatch(themeAction.toggleTheme());
+  };
 
   return (
     <React.Fragment>
@@ -166,7 +169,11 @@ const ExpensesForm = () => {
         <button className={classes.submit_button} onClick={addExpenseHandler}>
           Submit
         </button>
-       {premimum && <h4>Your expenses amount exceed more then $1000, go from premimum</h4>}
+        {premium && (
+          <button onClick={premiumHAndler} className={classes.premium_button}>
+            Expense Amount exceed $1000, click here for premium
+          </button>
+        )}
       </form>
       <section className={classes.section}>
         <h2 className={classes.heading}>Your Expenses</h2>

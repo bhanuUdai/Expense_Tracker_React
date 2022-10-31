@@ -5,6 +5,7 @@ import { useSelector,useDispatch } from "react-redux";
 import { authAction } from "../store/auth-reducer";
 const Header = () => {
   const isLogin=useSelector(state=>state.auth.token)
+  const premium=useSelector((state)=>state.expense.premium)
   const dispatch=useDispatch()
   const history = useHistory();
   const userlogOuthandler = () => {
@@ -29,6 +30,9 @@ const Header = () => {
             >
               Log Out
             </button>}
+          </li>
+          <li>
+            <button>{premium ? 'light mode':"dark mode"}</button>
           </li>
         </ul>
       </header>

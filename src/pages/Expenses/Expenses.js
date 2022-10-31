@@ -3,7 +3,7 @@ import classes from "./Expenses.module.css";
 const Expenses = (prop) => {
   return (
     <React.Fragment>
-      <main className={classes.main}>
+      <main  className={classes.main}>
         <span>
           <h3>Amount :</h3>
           <h2 className={classes.items}>$ {prop.items.amount}</h2>
