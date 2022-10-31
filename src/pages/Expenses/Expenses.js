@@ -1,6 +1,8 @@
 import React from "react";
 import classes from "./Expenses.module.css";
 const Expenses = (prop) => {
+
+  console.log('inside expense')
   return (
     <React.Fragment>
       <main  className={classes.main}>

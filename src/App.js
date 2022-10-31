@@ -10,9 +10,10 @@ import ForgetPassword from "./pages/Auth/ForgetPassword";
 import ExpensesForm from "./pages/Expenses/ExpensesForm";
 import { useSelector } from "react-redux";
 function App() {
+  console.log('inside app function')
   const isLogin = useSelector((state) => state.auth.token);
   const theme=useSelector((state=>state.theme.theme))
-  const premium=useSelector((state)=>state.expense.premium)
+  const premium=useSelector((state)=>state.expense.premiumButton)
   return (
     <React.Fragment>
       <div style={{backgroundColor:premium && theme && isLogin?'grey':'white'}}>

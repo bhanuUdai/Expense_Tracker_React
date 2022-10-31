@@ -3,15 +3,24 @@ import classes from "./Header.module.css";
 import { NavLink, useHistory } from "react-router-dom";
 import { useSelector,useDispatch } from "react-redux";
 import { authAction } from "../store/auth-reducer";
+import { themeAction } from "../store/theme-reducer";
 const Header = () => {
   const isLogin=useSelector(state=>state.auth.token)
-  const premium=useSelector((state)=>state.expense.premium)
+  const premium=useSelector((state)=>state.theme.onPremium)
+  const theme=useSelector((state)=>state.theme.theme)
   const dispatch=useDispatch()
   const history = useHistory();
   const userlogOuthandler = () => {
     dispatch(authAction.removeExpenseToken())
     history.replace("/");
   };
+
+
+  const themeChangeHandler=()=>
+  {
+    dispatch(themeAction.toggleTheme())
+  }
+
 
   return (
     <React.Fragment>
@@ -32,7 +41,7 @@ const Header = () => {
             </button>}
           </li>
           <li>
-            <button>{premium ? 'light mode':"dark mode"}</button>
+            {premium &&isLogin && <button className={classes.logout_button} onClick={themeChangeHandler} >{theme ? 'light mode':"dark mode"}</button>}
           </li>
         </ul>
       </header>

@@ -6,8 +6,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { expenseAction } from "../../store/expense-reducer";
 import { themeAction } from "../../store/theme-reducer";
 const ExpensesForm = () => {
+  console.log('expense from inside')
   const expenseArr = useSelector((state) => state.expense.expenses);
-  const premium = useSelector((state) => state.expense.premium);
+  const premiumButton = useSelector((state) => state.expense.premiumButton);
+  const premium=useSelector((state)=>state.theme.onPremium)
   const [isEditId, setIsEditId] = useState(null);
   const enteredAmountRef = useRef();
   const enteredDesRef = useRef();
@@ -131,6 +133,7 @@ const ExpensesForm = () => {
     enteredCatRef.current.value = "";
   };
 
+  
   if (expenseArr.length > 0) {
     let totalAmount = expenseArr.reduce((prev, current) => {
       return prev + Number(current.amount);
@@ -138,15 +141,18 @@ const ExpensesForm = () => {
 
     console.log(totalAmount);
     if (totalAmount > 1000) {
-      dispatch(expenseAction.setPremium());
+      dispatch(expenseAction.setPremiumButton());
     } else {
-      dispatch(expenseAction.unSetPremium());
+       dispatch(expenseAction.unSetPremiumButton());
+      dispatch(themeAction.offTheme())
+      dispatch(themeAction.offPremium())
     }
   }
 
   const premiumHAndler = (event) => {
     event.preventDefault();
-    dispatch(themeAction.toggleTheme());
+    dispatch(themeAction.onTheme());
+    dispatch(themeAction.onPremium())
   };
 
   return (
@@ -169,9 +175,9 @@ const ExpensesForm = () => {
         <button className={classes.submit_button} onClick={addExpenseHandler}>
           Submit
         </button>
-        {premium && (
+        {premiumButton && (
           <button onClick={premiumHAndler} className={classes.premium_button}>
-            Expense Amount exceed $1000, click here for premium
+            {premium?'you subscribe to premium':'Expense Amount exceed $1000, click here for premium'}
           </button>
         )}
       </form>
@@ -179,6 +185,7 @@ const ExpensesForm = () => {
         <h2 className={classes.heading}>Your Expenses</h2>
         {expenseArr.length > 0 &&
           expenseArr.map((obj) => {
+            console.log('expense array')
             return (
               <Expenses
                 key={Math.random()}
