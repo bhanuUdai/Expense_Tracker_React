@@ -5,11 +5,11 @@ import useHttp from "../../hook/useHttp";
 import { useDispatch, useSelector } from "react-redux";
 import { expenseAction } from "../../store/expense-reducer";
 import { themeAction } from "../../store/theme-reducer";
+import { NavLink } from "react-router-dom";
 const ExpensesForm = () => {
-  console.log('expense from inside')
   const expenseArr = useSelector((state) => state.expense.expenses);
   const premiumButton = useSelector((state) => state.expense.premiumButton);
-  const premium=useSelector((state)=>state.theme.onPremium)
+  const premium = useSelector((state) => state.theme.onPremium);
   const [isEditId, setIsEditId] = useState(null);
   const enteredAmountRef = useRef();
   const enteredDesRef = useRef();
@@ -30,7 +30,6 @@ const ExpensesForm = () => {
       }
       console.log(arr);
       dispatch(expenseAction.updateExpense(arr));
-      // setArr(arr);
     };
     sendRequest(
       {
@@ -40,12 +39,10 @@ const ExpensesForm = () => {
       },
       resData
     );
-  }, [sendRequest]);
+  }, [sendRequest, dispatch]);
 
   const editButtonHandler = (data) => {
-    let filteredArr = expenseArr.filter((arr) => arr.Id !== data.Id);
-    dispatch(expenseAction.updateExpense(filteredArr));
-    //setArr(filteredArr);
+    dispatch(expenseAction.edditingExpense(data.Id));
     enteredAmountRef.current.value = data.amount;
     enteredDesRef.current.value = data.description;
     enteredCatRef.current.value = data.category;
@@ -55,9 +52,7 @@ const ExpensesForm = () => {
   const deleteButtonHandler = (data) => {
     console.log(data);
     const resData = () => {
-      let filteredArr = expenseArr.filter((arr) => arr.Id !== data);
-      dispatch(expenseAction.updateExpense(filteredArr));
-      //setArr(filteredArr);
+      dispatch(expenseAction.edditingExpense(data));
     };
 
     sendRequest(
@@ -93,10 +88,7 @@ const ExpensesForm = () => {
         console.log("post");
         const resData = (res) => {
           const expenseObjWithId = { ...expenseObj, Id: res.data.name };
-          dispatch(
-            expenseAction.updateExpense([...expenseArr, expenseObjWithId])
-          );
-          //setArr([...expenseArr, expenseObjWithId]);
+          dispatch(expenseAction.addingNewExpense(expenseObjWithId));
         };
 
         sendRequest(
@@ -111,8 +103,7 @@ const ExpensesForm = () => {
       } else {
         const resEditData = (data) => {
           console.log(data, "put data");
-          dispatch(expenseAction.updateExpense([...expenseArr, data.data]));
-          //setArr([...expenseArr, data.data]);
+          dispatch(expenseAction.addingNewExpense(data.data));
           setIsEditId(null);
         };
 
@@ -133,27 +124,39 @@ const ExpensesForm = () => {
     enteredCatRef.current.value = "";
   };
 
-  
-  if (expenseArr.length > 0) {
-    let totalAmount = expenseArr.reduce((prev, current) => {
-      return prev + Number(current.amount);
-    }, 0);
+  useEffect(() => {
+    if (expenseArr.length > 0) {
+      let totalAmount = expenseArr.reduce((prev, current) => {
+        return prev + Number(current.amount);
+      }, 0);
 
-    console.log(totalAmount);
-    if (totalAmount > 1000) {
-      dispatch(expenseAction.setPremiumButton());
-    } else {
-       dispatch(expenseAction.unSetPremiumButton());
-      dispatch(themeAction.offTheme())
-      dispatch(themeAction.offPremium())
+      if (totalAmount > 1000) {
+        dispatch(expenseAction.setPremiumButton());
+      } else {
+        dispatch(expenseAction.unSetPremiumButton());
+        dispatch(themeAction.offTheme());
+        dispatch(themeAction.offPremium());
+      }
     }
-  }
+  }, [expenseArr, dispatch]);
 
   const premiumHAndler = (event) => {
     event.preventDefault();
     dispatch(themeAction.onTheme());
-    dispatch(themeAction.onPremium())
+    dispatch(themeAction.onPremium());
   };
+
+
+  function makeCSV(data) {
+    let arr1 = data.map((obj) => {
+      let arr2 = [obj.amount, obj.category, obj.description];
+      return arr2.join();
+    });
+    arr1.unshift(['AMOUNT','CATEGORY','DESCRIPTION'])
+    return arr1.join("\n");
+  }
+
+  const blob = new Blob([makeCSV(expenseArr)]);
 
   return (
     <React.Fragment>
@@ -177,15 +180,19 @@ const ExpensesForm = () => {
         </button>
         {premiumButton && (
           <button onClick={premiumHAndler} className={classes.premium_button}>
-            {premium?'you subscribe to premium':'Expense Amount exceed $1000, click here for premium'}
+            {premium
+              ? "you subscribe to premium"
+              : "Expense Amount exceed $1000, click here for premium"}
           </button>
         )}
+       {expenseArr.length>0 && premium && <a className={classes.anchor} href={URL.createObjectURL(blob)}  download="file.csv">
+          Download Expense
+        </a>}
       </form>
       <section className={classes.section}>
         <h2 className={classes.heading}>Your Expenses</h2>
         {expenseArr.length > 0 &&
           expenseArr.map((obj) => {
-            console.log('expense array')
             return (
               <Expenses
                 key={Math.random()}
