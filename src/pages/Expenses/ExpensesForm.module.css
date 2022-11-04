@@ -28,12 +28,13 @@
     border-color: transparent;
     font-weight: 700;
     padding: 2%;
-    width: 19rem;
     margin: auto;
     margin-top: 5%;
     font-size: 17px;
     background-color: transparent;
     border-radius: 8px;
+    width: auto;
+    margin: auto;
 }
 
 .anchor{

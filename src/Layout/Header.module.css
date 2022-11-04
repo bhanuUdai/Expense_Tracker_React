@@ -1,7 +1,12 @@
 .header {
   color: rgb(204, 66, 66);
   background-color: black;
+  z-index: 10;
+  position: fixed;
+  top: 0;
+  width: 100%;
 }
+
 
 .header ul {
   display: flex;
@@ -9,6 +14,7 @@
   justify-content: space-around;
   list-style-type: none;
   margin: 0;
+  padding: 10px;
 }
 
 .header ul li {
@@ -16,7 +22,7 @@
 }
 
 .logout_button {
-  margin-top: 16%;
+ 
   height: 30px;
   border: 1px solid #f7f7f7;
   color: white;
@@ -40,3 +46,5 @@
 .logout_button:hover {
   background-color: rgb(221, 10, 10);
 }
+
+

@@ -12,6 +12,7 @@ const Header = () => {
   const history = useHistory();
   const userlogOuthandler = () => {
     dispatch(authAction.removeExpenseToken())
+    dispatch(authAction.removeUserEmail())
     history.replace("/");
   };
 
@@ -25,11 +26,11 @@ const Header = () => {
   return (
     <React.Fragment>
       <header className={classes.header}>
-        <ul>
+        <ul >
           <li>
-            <p>Home</p>
+          <NavLink className={classes.expense_link} activeClassName={classes.expense_active} to="/welcome">Home</NavLink>
           </li>
-          <li className={classes.expense} >
+          <li >
             <NavLink className={classes.expense_link} activeClassName={classes.expense_active} to="/expenses">Expenses</NavLink>
           </li>
           <li>

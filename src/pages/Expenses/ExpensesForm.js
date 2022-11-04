@@ -5,7 +5,6 @@ import useHttp from "../../hook/useHttp";
 import { useDispatch, useSelector } from "react-redux";
 import { expenseAction } from "../../store/expense-reducer";
 import { themeAction } from "../../store/theme-reducer";
-import { NavLink } from "react-router-dom";
 const ExpensesForm = () => {
   const expenseArr = useSelector((state) => state.expense.expenses);
   const premiumButton = useSelector((state) => state.expense.premiumButton);
@@ -16,6 +15,7 @@ const ExpensesForm = () => {
   const enteredCatRef = useRef();
   const { error, sendRequest } = useHttp();
   const dispatch = useDispatch();
+  const userMail=useSelector(state=>state.auth.useremail)
 
   useEffect(() => {
     const resData = (res) => {
@@ -34,7 +34,7 @@ const ExpensesForm = () => {
     sendRequest(
       {
         request: "get",
-        url: "https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/expense.json",
+        url: `https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/${userMail}.json`,
         header: { "Content-Type": "application/json " },
       },
       resData
@@ -58,7 +58,7 @@ const ExpensesForm = () => {
     sendRequest(
       {
         request: "delete",
-        url: `https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/expense/${data}.json`,
+        url: `https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/${userMail}/${data}.json`,
         header: { "Content-Type": "application/json " },
       },
       resData
@@ -94,7 +94,7 @@ const ExpensesForm = () => {
         sendRequest(
           {
             request: "post",
-            url: "https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/expense.json",
+            url: `https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/${userMail}.json`,
             body: expenseObj,
             header: { "Content-Type": "application/json " },
           },
@@ -110,7 +110,7 @@ const ExpensesForm = () => {
         sendRequest(
           {
             request: "put",
-            url: `https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/expense/${isEditId}.json`,
+            url: `https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/${userMail}/${isEditId}.json`,
             body: expenseObj,
             header: { "Content-Type": "application/json " },
           },

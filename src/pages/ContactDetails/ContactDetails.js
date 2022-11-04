@@ -1,10 +1,11 @@
 import axios from "axios";
 import React, { useRef } from "react";
 import classes from "./ContactDetails.module.css";
+import { useHistory } from "react-router-dom";
 const ContactDetails = () => {
   const userNameRef = useRef();
   const userProfileUrlRef = useRef();
-
+  const history=useHistory()
   const detailSubmithandler = async (event) => {
     event.preventDefault();
     try {
@@ -45,17 +46,23 @@ const ContactDetails = () => {
     }
   };
 
+  const cancelHandler=(event)=>
+  {
+      event.preventDefault();
+      history.push('/welcome')
+  }
+
   return (
     <React.Fragment>
       <form>
         <h4>Contact Details</h4>
         <label htmlFor="name">Full Name</label>
-        <input required ref={userNameRef} type="text" id="name"></input>
+        <input  ref={userNameRef} type="text" id="name"></input>
         <label htmlFor="url_">Profile Photo URL</label>
-        <input required ref={userProfileUrlRef} type="url" id="url_"></input>
+        <input  ref={userProfileUrlRef} type="url" id="url_"></input>
         <div className={classes.button_div}>
           <button onClick={detailSubmithandler} className={classes.update_btn}>update</button>
-          <button className={classes.cancel_button}>cancel</button>
+          <button onClick={cancelHandler} className={classes.cancel_button}>cancel</button>
         </div>
       </form>
     </React.Fragment>

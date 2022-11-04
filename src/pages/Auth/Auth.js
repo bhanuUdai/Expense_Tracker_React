@@ -39,6 +39,7 @@ const Auth = () => {
       if (isLogin) {
         const resData = (res) => {
           dispatch(authAction.getExpenseToken(res.data.idToken))
+          dispatch(authAction.setUserEmail(enteredEmail))
           history.replace("/welcome");
           enteredEmailRef.current.value = "";
           enteredPassRef.current.value = "";

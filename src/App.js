@@ -9,6 +9,7 @@ import VerifyLinkSend from "./pages/Auth/VerifyLinkSend";
 import ForgetPassword from "./pages/Auth/ForgetPassword";
 import ExpensesForm from "./pages/Expenses/ExpensesForm";
 import { useSelector } from "react-redux";
+import Footer from "./Layout/Footer";
 function App() {
   console.log('inside app function')
   const isLogin = useSelector((state) => state.auth.token);
@@ -16,14 +17,16 @@ function App() {
   const premium=useSelector((state)=>state.expense.premiumButton)
   return (
     <React.Fragment>
-      <div style={{backgroundColor:premium && theme && isLogin?'grey':'white'}}>
+      <main style={{background:premium && theme && isLogin?'grey':'white'}}>
         <Header />
         <Switch>
           <Route path="/" exact>
-            <Auth />
+            {!isLogin && <Auth />}
+            {isLogin && <Redirect to='/welcome'/>}
           </Route>
           <Route path="/welcome">
-            <Welcome />
+            {isLogin && <Welcome />}
+            {!isLogin && <Redirect to='/'/>}
           </Route>
           <Route path="/contact">
             <Contact />
@@ -42,7 +45,8 @@ function App() {
             {!isLogin && <Redirect to="/" />}
           </Route>
         </Switch>
-      </div>
+        <Footer/>
+      </main>
     </React.Fragment>
   );
 }
