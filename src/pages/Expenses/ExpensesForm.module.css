@@ -17,6 +17,7 @@
 .error_heading{
     display: flex;
     justify-content: center;
+    margin-top: 69px;
 }
 
 .submit_button:hover
