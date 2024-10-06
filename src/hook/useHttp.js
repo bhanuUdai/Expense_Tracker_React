@@ -1,5 +1,5 @@
 import axios from "axios";
-import  { useState, useCallback } from "react";
+import { useState, useCallback } from "react";
 
 const useHttp = () => {
   const [error, setError] = useState(null);
@@ -7,12 +7,21 @@ const useHttp = () => {
   const sendRequest = useCallback(async (requestConfig, resData) => {
     setError(null);
 
-    console.log("requestConfig==>",requestConfig.body)
+    console.log("requestConfig==>", requestConfig.body);
     try {
-      const res = await axios[requestConfig.request](requestConfig.url,  {
-        data: requestConfig?.body,
-        headers: requestConfig.header,
-      });
+      let res;
+
+      // Handle different types of requests
+      if (requestConfig.request === "DELETE") {
+        res = await axios.delete(requestConfig.url, {
+          data: requestConfig.body, // Sending body for DELETE requests
+        });
+      } else {
+        res = await axios[requestConfig.request](
+          requestConfig.url,
+          requestConfig.body
+        );
+      }
 
       console.log(res);
       resData(res);

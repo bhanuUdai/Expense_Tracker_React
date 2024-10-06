@@ -15,6 +15,7 @@ from mysite.db_utils import execute_query
 
 @api_view(['POST'])
 def add_expense(request):
+    print("DATA==>",request.data)
     amount = request.data.get('amount')
     description = request.data.get('description')
     category = request.data.get('category')
