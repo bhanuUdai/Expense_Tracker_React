@@ -1,0 +1,11 @@
+insert_expense: |
+  INSERT INTO expense.expenses (amount, description, category)
+  VALUES (:amount, :description, :category )
+  RETURNING amount, description, category
+
+get_expenses: |
+  SELECT * FROM expense.expenses ORDER BY created_at DESC
+
+delete_expense: |
+  DELETE FROM expense.expenses WHERE id = :id 
+  RETURNING amount, description, category

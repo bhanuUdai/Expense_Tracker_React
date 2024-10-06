@@ -20,21 +20,28 @@ const ExpensesForm = () => {
   useEffect(() => {
     const resData = (res) => {
       let arr = [];
-      for (const prop in res.data) {
+      for (const prop of res?.data?.res) {
         arr.push({
-          Id: prop,
-          amount: res.data[prop].amount,
-          category: res.data[prop].category,
-          description: res.data[prop].description,
+          Id: prop?.id,
+          amount: prop?.amount,
+          category: prop?.category,
+          description: prop?.description,
         });
       }
-      console.log(arr);
       dispatch(expenseAction.updateExpense(arr));
     };
+    // sendRequest(
+    //   {
+    //     request: "get",
+    //     url: `https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/${userMail}.json`,
+    //     header: { "Content-Type": "application/json " },
+    //   },
+    //   resData
+    // );
     sendRequest(
       {
         request: "get",
-        url: `https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/${userMail}.json`,
+        url: `http://localhost:8080/expense_tracker/get_expenses/`,
         header: { "Content-Type": "application/json " },
       },
       resData
@@ -50,15 +57,20 @@ const ExpensesForm = () => {
   };
 
   const deleteButtonHandler = (data) => {
-    console.log(data);
     const resData = () => {
       dispatch(expenseAction.edditingExpense(data));
     };
 
+    console.log("Data==>",data);
+
+    let payLoad = {
+      id : data
+    }
     sendRequest(
       {
         request: "delete",
-        url: `https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/${userMail}/${data}.json`,
+        url: `http://localhost:8080/expense_tracker/delete_expense/`,
+        body: payLoad,
         header: { "Content-Type": "application/json " },
       },
       resData
@@ -91,10 +103,19 @@ const ExpensesForm = () => {
           dispatch(expenseAction.addingNewExpense(expenseObjWithId));
         };
 
+        // sendRequest(
+        //   {
+        //     request: "post",
+        //     url: `https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/${userMail}.json`,
+        //     body: expenseObj,
+        //     header: { "Content-Type": "application/json " },
+        //   },
+        //   resData
+        // );
         sendRequest(
           {
             request: "post",
-            url: `https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/${userMail}.json`,
+            url: `http://localhost:8080/expense_tracker/add_expense/`,
             body: expenseObj,
             header: { "Content-Type": "application/json " },
           },

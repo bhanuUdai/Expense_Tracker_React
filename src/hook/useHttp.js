@@ -6,10 +6,14 @@ const useHttp = () => {
 
   const sendRequest = useCallback(async (requestConfig, resData) => {
     setError(null);
+
+    console.log("requestConfig==>",requestConfig.body)
     try {
-      const res = await axios[requestConfig.request](requestConfig.url, requestConfig.body?requestConfig.body:null, {
+      const res = await axios[requestConfig.request](requestConfig.url,  {
+        data: requestConfig?.body,
         headers: requestConfig.header,
       });
+
       console.log(res);
       resData(res);
     } catch (err) {
