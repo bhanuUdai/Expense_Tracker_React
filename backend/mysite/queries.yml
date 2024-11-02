@@ -9,3 +9,9 @@ get_expenses: |
 delete_expense: |
   DELETE FROM expense.expenses WHERE id = :id 
   RETURNING amount, description, category
+
+edit_expense: |
+  UPDATE  expense.expenses 
+  SET amount = :amount, description = :description, category = :category
+  WHERE id = :id
+  RETURNING amount, description, category 

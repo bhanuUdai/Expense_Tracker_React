@@ -30,8 +30,10 @@ def execute_query(query_name, params = None):
     if params:
         query = _replace_named_placeholders(query, params)
 
+
     with connection.cursor() as cursor:
         if params:
+            print("query===>",query, list(params.values()))
             # Use list(params.values()) only if params is not None
             cursor.execute(query, list(params.values()))
         else:

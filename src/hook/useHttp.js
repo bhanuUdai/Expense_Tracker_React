@@ -12,11 +12,12 @@ const useHttp = () => {
       let res;
 
       // Handle different types of requests
-      if (requestConfig.request === "DELETE") {
+      if (requestConfig.request === "delete") {
         res = await axios.delete(requestConfig.url, {
           data: requestConfig.body, // Sending body for DELETE requests
         });
       } else {
+        console.log("requestConfig==>",requestConfig)
         res = await axios[requestConfig.request](
           requestConfig.url,
           requestConfig.body

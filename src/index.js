@@ -7,16 +7,20 @@ import { BrowserRouter } from "react-router-dom";
 import ContextProvier from "./store/ContextProvider";
 import { Provider } from "react-redux";
 import store from "./store/index";
+import { ThemeProvider } from "@mui/material";
+import theme from "./theme";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-    <Provider store={store}>
-    <ContextProvier>
-    <App />
-    </ContextProvier>
-    </Provider>
+      <Provider store={store}>
+        <ContextProvier>
+          <ThemeProvider theme={theme} >
+          <App />
+          </ThemeProvider>
+        </ContextProvier>
+      </Provider>
     </BrowserRouter>
   </React.StrictMode>
 );

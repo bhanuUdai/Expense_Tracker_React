@@ -40,6 +40,7 @@ def add_expense(request):
 
 @api_view(['GET'])
 def get_expenses(request):
+    print("GETTT")
     res = execute_query('get_expenses')
     return Response({
         "res" : res,
@@ -58,6 +59,29 @@ def delete_expense(request):
         'id': id
     }
     res = execute_query('delete_expense',params)
+    return Response({
+        "res" : res,
+        "error" : False
+    },status=200)
+    
+@api_view(['PUT'])
+def edit_expense(request):
+    print("request==>",request.data)
+    id = request.data.get("id")
+    amount = request.data.get('amount')
+    description = request.data.get('description')
+    category = request.data.get('category')
+    if not id or not amount or not description or not category:
+         return Response({'error': True,
+                          'message': 'All fields are required.'
+                }, status=400)
+    params = {
+        'amount': amount,
+        'description': description,
+        'category': category,
+        'id': id,
+    }
+    res = execute_query('edit_expense',params)
     return Response({
         "res" : res,
         "error" : False

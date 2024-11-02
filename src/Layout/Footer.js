@@ -3,9 +3,9 @@ import classes from "./Footer.module.css"
 const Footer=()=>
 {
    return( <React.Fragment>
-        <main className={classes.main} >
+        {/* <main className={classes.main} >
             <p>copyright @ Bhanu</p>
-        </main>
+        </main> */}
     </React.Fragment>)
 }
 
