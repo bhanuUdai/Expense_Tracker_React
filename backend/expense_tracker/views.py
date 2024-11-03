@@ -12,6 +12,7 @@
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from mysite.db_utils import execute_query
+import json
 
 @api_view(['POST'])
 def add_expense(request):
@@ -71,7 +72,7 @@ def edit_expense(request):
     amount = request.data.get('amount')
     description = request.data.get('description')
     category = request.data.get('category')
-    if not id or not amount or not description or not category:
+    if not id and not amount and not description and not category:
          return Response({'error': True,
                           'message': 'All fields are required.'
                 }, status=400)
@@ -86,3 +87,32 @@ def edit_expense(request):
         "res" : res,
         "error" : False
     },status=200)
+
+@api_view(['POST'])
+def user_login(request):
+    data = json.loads(request.body)
+    firebase_uid = data['firebase_uid']
+    email = data['email']
+    if not firebase_uid and not email:
+        return Response({
+            'error' : True,
+            'message': 'All fields are required.'
+        },status = 400)
+    params = {
+        'firebase_uid': firebase_uid
+    }
+    res = execute_query('get_user_id',params)
+
+    if (res):
+        data = res
+    else:
+        params = {
+            'firebase_uid': firebase_uid,
+            'email' : email
+        }
+        res = execute_query('create_user',params)
+        data = res
+    return Response({
+        'res' : data,
+        'error' : False
+    },status = 200)

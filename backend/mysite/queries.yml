@@ -15,3 +15,11 @@ edit_expense: |
   SET amount = :amount, description = :description, category = :category
   WHERE id = :id
   RETURNING amount, description, category 
+
+get_user_id: |
+  SELECT id, email FROM users WHERE firebase_uid = :firebase_uid
+
+create_user: |
+  INSERT INTO users (firebase_uid, email)
+  VALUES (:firebase_uid, :email)
+  RETURNING  id, email

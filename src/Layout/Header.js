@@ -68,6 +68,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
+import { useDispatch } from 'react-redux';
+import { authAction } from '../store/auth-reducer';
 
 const pages = ['Home', 'Expenses'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -77,12 +79,19 @@ function ResponsiveAppBar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
+  };
+
+  const userlogOuthandler = () => {
+    dispatch(authAction.removeExpenseToken())
+    dispatch(authAction.removeUserEmail())
+    history.replace("/");
   };
 
   const handleCloseNavMenu = (e) => {
@@ -97,8 +106,16 @@ function ResponsiveAppBar() {
     }
   };
 
-  const handleCloseUserMenu = () => {
+  const handleCloseUserMenu = (key) => {
     setAnchorElUser(null);
+    switch (key) {
+      case 'Logout':
+        userlogOuthandler()
+        break;
+    
+      default:
+        break;
+    }
   };
 
   return (
@@ -211,7 +228,7 @@ function ResponsiveAppBar() {
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem  key={setting} onClick={handleCloseUserMenu}>
+                <MenuItem  key={setting} onClick={()=> handleCloseUserMenu(setting)}>
                   <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
                 </MenuItem>
               ))}

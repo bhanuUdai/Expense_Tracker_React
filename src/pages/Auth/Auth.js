@@ -86,6 +86,35 @@ const Auth = () => {
     }
   }
 
+  const registerUser = async(fire,email)=>{
+    try{
+
+      const resData = (res)=>{
+        dispatch(authAction.getExpenseToken(fire.data.idToken));
+        dispatch(authAction.setUserEmail(res?.data?.res[0]?.email));
+        history.replace("/welcome");
+        setEnteredEmail('');
+        setEnteredPass('');
+      }
+
+    let payLoad = {
+      firebase_uid : fire.data.localId,
+      email : email
+    }
+      sendRequest(
+        {
+          request: "post",
+          url: `http://localhost:8080/expense_tracker/user_login/`,
+          body: payLoad,
+        },
+        resData
+      );
+
+    }catch(e){
+      console.log(e);
+    }
+  }
+
   const submitHandler = async (event) => {
     event.preventDefault();
     try {
@@ -103,10 +132,11 @@ const Auth = () => {
       if (isLogin) {
         const resData = (res) => {
           dispatch(authAction.getExpenseToken(res.data.idToken));
-          dispatch(authAction.setUserEmail(enteredEmail));
-          history.replace("/welcome");
-          setEnteredEmail('');
-          setEnteredPass('');
+          registerUser(res,enteredEmail);
+          // dispatch(authAction.setUserEmail(enteredEmail));
+          // history.replace("/welcome");
+          // setEnteredEmail('');
+          // setEnteredPass('');
         };
 
         sendRequest(
@@ -115,6 +145,7 @@ const Auth = () => {
             url: "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
             body: authObj,
             header: { "Content-Type": "application/json" },
+            type : "auth"
           },
           resData
         );
@@ -149,6 +180,7 @@ const Auth = () => {
               url: "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
               body: authObj,
               header: { "Content-Type": "application/json" },
+              type : "auth"
             },
             resData
           );

@@ -11,17 +11,31 @@ const useHttp = () => {
     try {
       let res;
 
+      let authToken = (localStorage.getItem('ExpenseToken'));
+      const headers = {
+        Authorization: `Bearer ${authToken}`,
+        'Content-Type': 'application/json'
+      };
+      if(requestConfig?.type === "auth"){
+        delete headers['Authorization']
+      }
       // Handle different types of requests
       if (requestConfig.request === "delete") {
-        res = await axios.delete(requestConfig.url, {
-          data: requestConfig.body, // Sending body for DELETE requests
-        });
+        res= await axios({
+          cancelToken : null,
+          method: requestConfig.request || 'get',
+          url : requestConfig.url,
+          data : requestConfig.body,
+          headers: headers,
+        })
       } else {
-        console.log("requestConfig==>",requestConfig)
-        res = await axios[requestConfig.request](
-          requestConfig.url,
-          requestConfig.body
-        );
+        res= await axios({
+          cancelToken : null,
+          method: requestConfig.request || 'get',
+          url : requestConfig.url,
+          data : requestConfig.body,
+          headers: headers,
+        })
       }
 
       console.log(res);
