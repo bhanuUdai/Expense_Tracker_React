@@ -7,15 +7,19 @@ const useHttp = () => {
   const sendRequest = useCallback(async (requestConfig, resData) => {
     setError(null);
 
-    console.log("requestConfig==>", requestConfig.body);
     try {
       let res;
-
       let authToken = (localStorage.getItem('ExpenseToken'));
-      const headers = {
+
+      console.log("requestConfig==>", requestConfig, authToken);
+
+      let headers = {
         Authorization: `Bearer ${authToken}`,
         'Content-Type': 'application/json'
       };
+      // if(requestConfig?.header){
+      //   headers = requestConfig?.header;
+      // }
       if(requestConfig?.type === "auth"){
         delete headers['Authorization']
       }
@@ -29,6 +33,7 @@ const useHttp = () => {
           headers: headers,
         })
       } else {
+        console.log("BHANU==>",headers);
         res= await axios({
           cancelToken : null,
           method: requestConfig.request || 'get',

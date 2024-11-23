@@ -15,8 +15,9 @@ def firebase_auth_middleware(get_response):
     def middleware(request):
         # Skip authentication for certain paths (like login)
         skipping_arr = ['/expense_tracker/user_login/']
-        # if request.path in skipping_arr:
-        #     return get_response(request)
+        print("MIDDLE==>")
+        if request.path in skipping_arr:
+            return get_response(request)
 
         # Get the token from the Authorization header
         token = request.META.get('HTTP_AUTHORIZATION')
@@ -41,8 +42,6 @@ def firebase_auth_middleware(get_response):
             except Exception as e:
                 print("Token verification failed:", str(e))
                 return JsonResponse({'status': 'error', 'message': 'Unauthorized', 'details': str(e)}, status=401)
-
-        print("MIDDLEWARE B===>")
         return get_response(request)
 
     return middleware

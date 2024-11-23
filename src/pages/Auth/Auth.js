@@ -106,6 +106,10 @@ const Auth = () => {
           request: "post",
           url: `http://localhost:8080/expense_tracker/user_login/`,
           body: payLoad,
+          header : {
+            Authorization: `Bearer ${fire.data.idToken}`,
+            'Content-Type': 'application/json'
+          }
         },
         resData
       );
@@ -131,7 +135,7 @@ const Auth = () => {
 
       if (isLogin) {
         const resData = (res) => {
-          dispatch(authAction.getExpenseToken(res.data.idToken));
+          // dispatch(authAction.getExpenseToken(res.data.idToken));
           registerUser(res,enteredEmail);
           // dispatch(authAction.setUserEmail(enteredEmail));
           // history.replace("/welcome");

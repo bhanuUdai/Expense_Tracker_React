@@ -53,24 +53,31 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
+    FIREBASE_MIDDLEWARE,
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'corsheaders.middleware.CorsMiddleware',
-    FIREBASE_MIDDLEWARE
+  
 ]
 
 ROOT_URLCONF = 'mysite.urls'
 CORS_ALLOW_ALL_ORIGINS = True
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'rest_framework.authentication.TokenAuthentication',
-    ],
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.IsAuthenticated',  # Optional, to require authentication by default
-    ],
-}
+
+
+# This settings is only used if we  are using django authentication
+# This settings for checking the token on every request
+# REST_FRAMEWORK = {
+#    'DEFAULT_AUTHENTICATION_CLASSES': (
+#        'rest_framework.authentication.TokenAuthentication',
+#    ),
+#    'DEFAULT_PERMISSION_CLASSES': (
+#         'rest_framework.permissions.IsAdminUser'
+#    ),
+# }
+
+
 
 
 TEMPLATES = [
@@ -100,7 +107,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'expense_tracker',
         'USER': 'udaibhanu',
-        'PASSWORD': 'Bhanu@26',
+        'PASSWORD': 'Bhanu26',
         'HOST': 'localhost',
         'PORT': '5432',
         'POOL_OPTIONS': {
