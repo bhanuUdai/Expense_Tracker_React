@@ -20,6 +20,7 @@ def add_expense(request):
     amount = request.data.get('amount')
     description = request.data.get('description')
     category = request.data.get('category')
+    project_id = request.data.get('project_id')
 
     if not amount or not description or not category:
         return Response({'error': 'All fields are required.'}, status=400)
@@ -29,6 +30,7 @@ def add_expense(request):
         'amount': amount,
         'description': description,
         'category': category,
+        'project_id' : project_id
     }
 
     # Execute the query from the YAML file
@@ -41,8 +43,11 @@ def add_expense(request):
 
 @api_view(['GET'])
 def get_expenses(request):
-    print("GETTT")
-    res = execute_query('get_expenses')
+    project_id = request.query_params.get('project_id')
+    params = {
+        "project_id" : project_id
+    }
+    res = execute_query('get_expenses', params)
     return Response({
         "res" : res,
         "error" : False
@@ -52,12 +57,14 @@ def get_expenses(request):
 def delete_expense(request):
     print("request==>",request.data)
     id = request.data.get("id")
+    project_id = request.data.get("project_id")
     if not id:
          return Response({'error': True,
                           'message': 'All fields are required.'
                 }, status=400)
     params = {
-        'id': id
+        'id': id,
+        'project_id' : project_id
     }
     res = execute_query('delete_expense',params)
     return Response({
@@ -72,6 +79,8 @@ def edit_expense(request):
     amount = request.data.get('amount')
     description = request.data.get('description')
     category = request.data.get('category')
+    project_id = request.data.get('project_id')
+
     if not id and not amount and not description and not category:
          return Response({'error': True,
                           'message': 'All fields are required.'
@@ -81,6 +90,7 @@ def edit_expense(request):
         'description': description,
         'category': category,
         'id': id,
+        'project_id' : project_id
     }
     res = execute_query('edit_expense',params)
     return Response({
@@ -112,7 +122,9 @@ def user_login(request):
         }
         res = execute_query('create_user',params)
         data = res
+    print("res==>",res)
+    # data = data.get("data",[])
     return Response({
-        'res' : data,
+        'res' : data[0],
         'error' : False
     },status = 200)

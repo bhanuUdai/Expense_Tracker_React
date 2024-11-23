@@ -3,6 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialAuth = {
   token: localStorage.getItem("ExpenseToken"),
   useremail: localStorage.getItem("ExpenseUserMail"),
+  projectId : ""
 };
 
 const authSlice = createSlice({
@@ -28,6 +29,9 @@ const authSlice = createSlice({
       state.useremail = "";
       localStorage.removeItem("ExpenseUserMail");
     },
+    setProjectId(state, action){
+      state.projectId = action.payload
+    }
   },
 });
 

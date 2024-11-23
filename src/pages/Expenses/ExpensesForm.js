@@ -22,6 +22,7 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Typography } from "@mui/material";
 import { Button } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
+import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 
 import Toaster from "../../elements/Toaster";
 const ExpensesForm = () => {
@@ -42,6 +43,8 @@ const ExpensesForm = () => {
   const [amount, setAmount] = useState(0);
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("grocery");
+  const location = useLocation();
+  const projectId = location?.pathname?.split('/').pop();
 
   useEffect(() => {
 
@@ -54,8 +57,9 @@ const ExpensesForm = () => {
     //   resData
     // );
     getExpenses();
+    console.log("CHECk")
  
-  }, [sendRequest, dispatch]);
+  }, []);
 
   const getExpenses = ()=>{
     try{
@@ -73,11 +77,16 @@ const ExpensesForm = () => {
         dispatch(expenseAction.updateExpense(arr));
       };
 
+      let payLoad = {
+        project_id : projectId
+      }
 
+      console.log('payLoad==>',payLoad);
       sendRequest(
         {
           request: "get",
           url: `http://localhost:8080/expense_tracker/get_expenses/`,
+          body: payLoad,
           header: { "Content-Type": "application/json " },
         },
         resData
@@ -115,6 +124,7 @@ const ExpensesForm = () => {
 
     let payLoad = {
       id: data,
+      project_id : projectId
     };
     sendRequest(
       {
@@ -162,11 +172,16 @@ const ExpensesForm = () => {
             }
           };
 
+          let payLoad = {
+            ...expenseObj,
+            project_id : projectId
+          }
+
           sendRequest(
             {
               request: "post",
               url: `http://localhost:8080/expense_tracker/add_expense/`,
-              body: expenseObj,
+              body: payLoad,
               header: { "Content-Type": "application/json " },
             },
             resData
@@ -182,6 +197,7 @@ const ExpensesForm = () => {
           let payLoad = {
             ...expenseObj,
             id: isEditId,
+            project_id : projectId
           };
 
           console.log("payLoad==>", payLoad);

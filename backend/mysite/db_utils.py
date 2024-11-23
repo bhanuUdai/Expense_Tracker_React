@@ -4,6 +4,8 @@ import yaml
 from django.conf import settings
 from django.db import connection
 import re
+from jinja2 import Template
+
 
 
 
@@ -18,27 +20,33 @@ def _replace_named_placeholders(query, params):
     keys = sorted(params.keys(), key=lambda k: len(k), reverse=True)
     # print("query1==>",query)
     for key in keys:
+        old_query = query
         query = re.sub(f":{key}", "%s", query)
+        print(f"Replacing :{key} -> %s in query")
+        print("Before:", old_query)
+        print("After:", query)
         # print("query2==>",query)
     return query
 
 def execute_query(query_name, params = None):
-    query = queries.get(query_name)
-    if not query:
+    query_template = queries.get(query_name)
+    if not query_template:
         raise ValueError(f"Query '{query_name}' not found in queries.yml")
     
-    if params:
-        query = _replace_named_placeholders(query, params)
+    
+     # Render query with Jinja2
+    query = Template(query_template).render(params or {})
 
 
     with connection.cursor() as cursor:
-        if params:
-            print("query===>",query, list(params.values()))
-            # Use list(params.values()) only if params is not None
-            cursor.execute(query, list(params.values()))
-        else:
-            cursor.execute(query)  # Execute the query without parameters
-            # result = [row._asdict() for row in cursor]
+        cursor.execute(query, list(params.values()) if params else [])
+        # if params:
+        #     print("query===>",query, list(params.values()))
+        #     # Use list(params.values()) only if params is not None
+        #     cursor.execute(query, list(params.values()))
+        # else:
+        #     cursor.execute(query)  # Execute the query without parameters
+        #     # result = [row._asdict() for row in cursor]
 
         # Fetch all rows
         rows = cursor.fetchall()

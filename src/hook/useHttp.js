@@ -33,17 +33,18 @@ const useHttp = () => {
           headers: headers,
         })
       } else {
-        console.log("BHANU==>",headers);
+        console.log("BHANU==>",requestConfig);
         res= await axios({
           cancelToken : null,
           method: requestConfig.request || 'get',
           url : requestConfig.url,
-          data : requestConfig.body,
+          params: requestConfig.request === 'get' ? requestConfig.body : undefined, // Use params for GET
+          data: requestConfig.request !== 'get' ? requestConfig.body : undefined, // Use data for other methods
           headers: headers,
         })
       }
 
-      console.log(res);
+      console.log("response A==>",res);
       resData(res);
     } catch (err) {
       setError(err.message);

@@ -7,21 +7,21 @@ const ContextProvier = (prop) => {
   const [photoUrl, setPhotoUrl] = useState();
 
   const ExpenseTokenHandler = (token) => {
-    setTokenId(token);
-    localStorage.setItem("ExpenseToken", token);
+    // setTokenId(token);
+    // localStorage.setItem("ExpenseToken", token);
   };
 
   const userDetaisHandler=(data)=>
   {
-    console.log(data)
-    setName(data.name);
-    setPhotoUrl(data.url);
+    // console.log(data)
+    // setName(data.name);
+    // setPhotoUrl(data.url);
   }
 
   const logOutHandler=()=>
   {
-    setTokenId();
-    localStorage.removeItem("ExpenseToken")
+    // setTokenId();
+    // localStorage.removeItem("ExpenseToken")
   }
 
   return (

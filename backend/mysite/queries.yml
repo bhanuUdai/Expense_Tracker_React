@@ -1,25 +1,28 @@
 insert_expense: |
-  INSERT INTO expense.expenses (amount, description, category)
-  VALUES (:amount, :description, :category )
+  INSERT INTO expense.expenses (amount, description, category, project_id)
+  VALUES ({{amount}}, '{{description}}', '{{category}}', {{project_id}} )
   RETURNING amount, description, category
 
 get_expenses: |
-  SELECT * FROM expense.expenses ORDER BY created_at DESC
+  SELECT * FROM expense.expenses
+  WHERE project_id = {{ project_id }} 
+  ORDER BY created_at DESC
+
 
 delete_expense: |
-  DELETE FROM expense.expenses WHERE id = :id 
+  DELETE FROM expense.expenses WHERE id = {{id}} AND project_id = {{project_id}}
   RETURNING amount, description, category
 
 edit_expense: |
   UPDATE  expense.expenses 
-  SET amount = :amount, description = :description, category = :category
-  WHERE id = :id
+  SET amount = {{amount}}, description = '{{description}}', category = '{{category}}'
+  WHERE id = {{id}} AND project_id = {{project_id}}
   RETURNING amount, description, category 
 
 get_user_id: |
-  SELECT id, email FROM users WHERE firebase_uid = :firebase_uid
+  SELECT id, email FROM users WHERE firebase_uid = '{{firebase_uid}}'
 
 create_user: |
   INSERT INTO users (firebase_uid, email)
-  VALUES (:firebase_uid, :email)
+  VALUES ('{{firebase_uid}}', '{{email}}')
   RETURNING  id, email

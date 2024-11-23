@@ -27,6 +27,7 @@ function App() {
   const isLogin = useSelector((state) => state.auth.token);
   const theme=useSelector((state=>state.theme.theme))
   const premium=useSelector((state)=>state.expense.premiumButton)
+  console.log("isLogin==>",isLogin);
   return (
     <React.Fragment>
       <main style={{background:premium && theme && isLogin?'grey':'white'}}>
@@ -34,26 +35,26 @@ function App() {
         <Suspense fallback={<Loading>Loading...</Loading>} >
         <Switch>
           <Route path="/" exact>
-            {!isLogin && <Auth />}
-            {isLogin && <Redirect to='/welcome'/>}
+            {<Auth />}
+            {/* {isLogin && <Redirect to='/welcome'/>} */}
           </Route>
-          <Route path="/welcome">
+          <Route path="/welcome/:id">
             {isLogin && <Welcome />}
             {!isLogin && <Redirect to='/'/>}
           </Route>
           <Route path="/contact">
             <Contact />
           </Route>
-          <Route path="/verifymail">
+          <Route path="/verifymail/:id">
             <VerifyEmail />
           </Route>
-          <Route path="/linksend">
+          <Route path="/linksend/:id">
             <VerifyLinkSend />
           </Route>
           <Route path="/forget_pass">
             <ForgetPassword />
           </Route>
-          <Route path="/expenses">
+          <Route path="/expenses/:id">
             {isLogin && <ExpensesForm />}
             {!isLogin && <Redirect to="/" />}
           </Route>

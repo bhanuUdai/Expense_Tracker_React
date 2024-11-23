@@ -4,7 +4,7 @@ import { useHistory } from "react-router-dom";
 import { Route } from "react-router-dom";
 import ForgetPassword from "./ForgetPassword";
 import useHttp from "../../hook/useHttp";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { authAction } from "../../store/auth-reducer";
 
 //MUI
@@ -37,10 +37,19 @@ const Auth = () => {
   const[ enteredConfPass, setEnteredConfPass] = useState('');
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [toasterMessage, setToasterMessage] = useState(false);
+  const projectId = useSelector((state) => state.auth.projectId);
 
   const history = useHistory();
   const { error, sendRequest } = useHttp();
   const dispatch = useDispatch();
+
+
+useEffect(()=>{
+  if(projectId){
+    history.replace(`/welcome/${projectId}`);
+  }
+},[projectId])
+
   const toggleAuthHandler = (event) => {
     event.preventDefault();
     setIsLogin(!isLogin);
@@ -89,10 +98,11 @@ const Auth = () => {
   const registerUser = async(fire,email)=>{
     try{
 
-      const resData = (res)=>{
+      const resData = (response)=>{
+        console.log("res==>",response?.data?.res?.id)
         dispatch(authAction.getExpenseToken(fire.data.idToken));
-        dispatch(authAction.setUserEmail(res?.data?.res[0]?.email));
-        history.replace("/welcome");
+        dispatch(authAction.setUserEmail(response?.data?.res?.email));
+        dispatch(authAction.setProjectId(response?.data?.res?.id))
         setEnteredEmail('');
         setEnteredPass('');
       }

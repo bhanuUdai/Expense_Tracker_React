@@ -67,8 +67,8 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
-import { useDispatch } from 'react-redux';
+import { useHistory, useLocation } from 'react-router-dom/cjs/react-router-dom.min';
+import { useDispatch, useSelector } from 'react-redux';
 import { authAction } from '../store/auth-reducer';
 
 const pages = ['Home', 'Expenses'];
@@ -80,6 +80,10 @@ function ResponsiveAppBar() {
 
   const history = useHistory();
   const dispatch = useDispatch();
+
+  const location = useLocation();
+  const projectId = location?.pathname?.split('/').pop();
+
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -100,9 +104,9 @@ function ResponsiveAppBar() {
     console.log("BHANU==>",selectedNav);
     setAnchorElNav(null);
     if(selectedNav === "home"){
-      history.push("/welcome");
+      history.push(`/welcome/${projectId}`);
     }else{
-      history.push(`/${selectedNav}`);
+      history.push(`/${selectedNav}/${projectId}`);
     }
   };
 
