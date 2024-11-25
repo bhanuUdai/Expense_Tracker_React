@@ -44,23 +44,22 @@ INSTALLED_APPS = [
     'expense_tracker',
     'rest_framework',
     'corsheaders'
-]
+    ]
 
 #Instead of using os.path.join to form a file path, directly reference your middleware function in Python module notation,
-FIREBASE_MIDDLEWARE = 'expense_tracker.middleware.firebase_auth_middleware'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    FIREBASE_MIDDLEWARE,
-    'django.middleware.csrf.CsrfViewMiddleware',
-    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',  # This applies CSRF protection
+    'django.contrib.auth.middleware.AuthenticationMiddleware',  # Handles auth
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-  
+    'corsheaders.middleware.CorsMiddleware',  # Handles CORS if needed
 ]
+
+
 
 ROOT_URLCONF = 'mysite.urls'
 CORS_ALLOW_ALL_ORIGINS = True
@@ -76,6 +75,24 @@ CORS_ALLOW_ALL_ORIGINS = True
 #         'rest_framework.permissions.IsAdminUser'
 #    ),
 # }
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [],
+#     'DEFAULT_PERMISSION_CLASSES': [
+#         'rest_framework.permissions.IsAuthenticated',
+#     ],
+# }
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'expense_tracker.authentication.FirebaseAuthentication',  # Use the dotted path
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+
 
 
 

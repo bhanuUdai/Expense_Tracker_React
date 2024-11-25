@@ -95,6 +95,7 @@ function ResponsiveAppBar() {
   const userlogOuthandler = () => {
     dispatch(authAction.removeExpenseToken())
     dispatch(authAction.removeUserEmail())
+    dispatch(authAction.setProjectId(""))
     history.replace("/");
   };
 

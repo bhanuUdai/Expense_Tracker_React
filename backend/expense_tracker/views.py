@@ -9,10 +9,17 @@
 
 
 # views.py
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes, authentication_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from mysite.db_utils import execute_query
 import json
+
+from rest_framework.decorators import permission_classes, authentication_classes
+from rest_framework.permissions import AllowAny
+from django.views.decorators.csrf import csrf_exempt
+
+
 
 @api_view(['POST'])
 def add_expense(request):
@@ -43,6 +50,8 @@ def add_expense(request):
 
 @api_view(['GET'])
 def get_expenses(request):
+    auth_data = (request.user.uid)
+    # print("get_expenses==>",(auth_data))
     project_id = request.query_params.get('project_id')
     params = {
         "project_id" : project_id
@@ -55,7 +64,6 @@ def get_expenses(request):
 
 @api_view(['DELETE'])
 def delete_expense(request):
-    print("request==>",request.data)
     id = request.data.get("id")
     project_id = request.data.get("project_id")
     if not id:
@@ -99,7 +107,13 @@ def edit_expense(request):
     },status=200)
 
 @api_view(['POST'])
+@csrf_exempt
+@permission_classes([AllowAny])  # No authentication required
+@authentication_classes([])     # Skip authentication mechanism
 def user_login(request):
+    print("Request Headers:", request.headers)
+    print("Authorization Header:", request.META.get('HTTP_AUTHORIZATION'))
+
     data = json.loads(request.body)
     firebase_uid = data['firebase_uid']
     email = data['email']

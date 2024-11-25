@@ -14,7 +14,7 @@ const useHttp = () => {
       console.log("requestConfig==>", requestConfig, authToken);
 
       let headers = {
-        Authorization: `Bearer ${authToken}`,
+        ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
         'Content-Type': 'application/json'
       };
       // if(requestConfig?.header){

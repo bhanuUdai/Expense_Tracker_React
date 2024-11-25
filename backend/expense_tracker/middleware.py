@@ -17,6 +17,7 @@ def firebase_auth_middleware(get_response):
         skipping_arr = ['/expense_tracker/user_login/']
         print("MIDDLE==>")
         if request.path in skipping_arr:
+            print("Skipping middleware for:", request.path)
             return get_response(request)
 
         # Get the token from the Authorization header
