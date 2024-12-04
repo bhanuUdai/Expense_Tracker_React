@@ -29,39 +29,43 @@ def _replace_named_placeholders(query, params):
     return query
 
 def execute_query(query_name, params = None):
-    query_template = queries.get(query_name)
-    if not query_template:
-        raise ValueError(f"Query '{query_name}' not found in queries.yml")
-    
-    
-     # Render query with Jinja2
-    query = Template(query_template).render(params or {})
+    try:
+        query_template = queries.get(query_name)
+        if not query_template:
+            raise ValueError(f"Query '{query_name}' not found in queries.yml")
+        
+        
+        # Render query with Jinja2
+        query = Template(query_template).render(params or {})
 
 
-    with connection.cursor() as cursor:
-        cursor.execute(query, list(params.values()) if params else [])
-        # if params:
-        #     print("query===>",query, list(params.values()))
-        #     # Use list(params.values()) only if params is not None
-        #     cursor.execute(query, list(params.values()))
-        # else:
-        #     cursor.execute(query)  # Execute the query without parameters
-        #     # result = [row._asdict() for row in cursor]
+        with connection.cursor() as cursor:
+            cursor.execute(query, list(params.values()) if params else [])
+            # if params:
+            #     print("query===>",query, list(params.values()))
+            #     # Use list(params.values()) only if params is not None
+            #     cursor.execute(query, list(params.values()))
+            # else:
+            #     cursor.execute(query)  # Execute the query without parameters
+            #     # result = [row._asdict() for row in cursor]
 
-        # Fetch all rows
-        rows = cursor.fetchall()
+            # Fetch all rows
+            rows = cursor.fetchall()
 
-        # Get column names from cursor.description
-        column_names = [desc[0] for desc in cursor.description]
+            # Get column names from cursor.description
+            column_names = [desc[0] for desc in cursor.description]
 
-        # Combine column names with rows to create a list of dictionaries
-        results = [
-            {column_names[i]: row[i] for i in range(len(column_names))}
-            for row in rows
-        ]
+            # Combine column names with rows to create a list of dictionaries
+            results = [
+                {column_names[i]: row[i] for i in range(len(column_names))}
+                for row in rows
+            ]
 
-        # print("result==>", results)  # Print the result with column names
-        return results
+            # print("result==>", results)  # Print the result with column names
+            return results
+    except Exception as e:
+        return
+
 
     
 

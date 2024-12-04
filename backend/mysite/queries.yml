@@ -26,3 +26,6 @@ create_user: |
   INSERT INTO users (firebase_uid, email)
   VALUES ('{{firebase_uid}}', '{{email}}')
   RETURNING  id, email
+
+get_user_details: |
+  SELECT * FROM users WHERE id = '{{project_id}}'

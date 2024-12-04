@@ -156,7 +156,7 @@ useEffect(()=>{
         sendRequest(
           {
             request: "post",
-            url: "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
+            url: "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyDOZNhzovobc8xMZkIos38RezyXZNWLWXQ",
             body: authObj,
             header: { "Content-Type": "application/json" },
             type : "auth"
@@ -191,7 +191,7 @@ useEffect(()=>{
           sendRequest(
             {
               request: "post",
-              url: "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
+              url: "https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyDOZNhzovobc8xMZkIos38RezyXZNWLWXQ",
               body: authObj,
               header: { "Content-Type": "application/json" },
               type : "auth"

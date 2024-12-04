@@ -48,7 +48,7 @@ const ForgetPassword = () => {
       sendRequest(
         {
           request:'post',
-          url: "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
+          url: "https://identitytoolkit.googleapis.com/v1/accounts:sendOobCode?key=AIzaSyDOZNhzovobc8xMZkIos38RezyXZNWLWXQ",
           body: passObj,
           header: { "Content-Type": "application/json" },
         },

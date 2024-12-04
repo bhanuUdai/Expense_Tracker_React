@@ -18,6 +18,7 @@ import json
 from rest_framework.decorators import permission_classes, authentication_classes
 from rest_framework.permissions import AllowAny
 from django.views.decorators.csrf import csrf_exempt
+from expense_tracker.helper.permissions import has_permission
 
 
 
@@ -29,6 +30,9 @@ def add_expense(request):
     category = request.data.get('category')
     project_id = request.data.get('project_id')
 
+    if not has_permission(request.user, project_id):
+        return Response({'error': True, 'message': 'Permission denied to edit this project.'}, status=403)
+   
     if not amount or not description or not category:
         return Response({'error': 'All fields are required.'}, status=400)
 
@@ -50,9 +54,14 @@ def add_expense(request):
 
 @api_view(['GET'])
 def get_expenses(request):
-    auth_data = (request.user.uid)
-    # print("get_expenses==>",(auth_data))
+    # user = (request.user)
+    # print("get_expenses==>",(user))
     project_id = request.query_params.get('project_id')
+
+    if not has_permission(request.user, project_id):
+        return Response({'error': True, 'message': 'Permission denied to edit this project.'}, status=403)
+    
+
     params = {
         "project_id" : project_id
     }
@@ -66,6 +75,10 @@ def get_expenses(request):
 def delete_expense(request):
     id = request.data.get("id")
     project_id = request.data.get("project_id")
+
+    if not has_permission(request.user, project_id):
+        return Response({'error': True, 'message': 'Permission denied to edit this project.'}, status=403)
+    
     if not id:
          return Response({'error': True,
                           'message': 'All fields are required.'
@@ -88,6 +101,9 @@ def edit_expense(request):
     description = request.data.get('description')
     category = request.data.get('category')
     project_id = request.data.get('project_id')
+
+    if not has_permission(request.user, project_id):
+        return Response({'error': True, 'message': 'Permission denied to edit this project.'}, status=403)
 
     if not id and not amount and not description and not category:
          return Response({'error': True,

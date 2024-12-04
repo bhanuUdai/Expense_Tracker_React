@@ -37,7 +37,7 @@ const ContactDetails = () => {
 
       if (userName.trim().length > 0 && userProfile.trim().length > 0) {
         const res = await axios.post(
-          "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyCSqjiKRacE_Kq1VBbV-oRPsKmxAsCULHY",
+          "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDOZNhzovobc8xMZkIos38RezyXZNWLWXQ",
           contactObj,
           {
             headers: { "Content-Type": "application/json" },
