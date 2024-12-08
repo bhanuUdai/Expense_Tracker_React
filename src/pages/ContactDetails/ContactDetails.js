@@ -7,50 +7,62 @@ import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
 import { Typography } from "@mui/material";
 import { Button } from "@mui/material";
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import CloseIcon from '@mui/icons-material/Close';
+import FileUploadIcon from "@mui/icons-material/FileUpload";
+import CloseIcon from "@mui/icons-material/Close";
 import useHttp from "../../hook/useHttp";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+import Toaster from "../../elements/Toaster";
+import Backdrop from "@mui/material/Backdrop";
 
+import GradientCircularBar from "../../elements/GradientCircularBar";
 
-const ContactDetails = () => {
+const ContactDetails = ({ getProfileDetails }) => {
   const history = useHistory();
 
   const [selectedImageUrl, setSelectedImageUrl] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [userName, setUserName] = useState("");
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [toasterMessage, setToasterMessage] = useState(false);
   const location = useLocation();
 
   const { error, sendRequest, loading } = useHttp();
 
-  const projectId = location?.pathname?.split('/').pop();
+  console.log("Loading==>", loading);
+
+  const projectId = location?.pathname?.split("/").pop();
 
   // Handle file selection
   const handleImageChange = (event) => {
     const file = event.target.files[0]; // Only the first file is selected
-    setSelectedImage(file)
+    setSelectedImage(file);
     if (file) {
       setSelectedImageUrl(URL.createObjectURL(file));
     }
   };
- 
+
   const imageUploadHandler = async () => {
     try {
       const resData = (res) => {
-        console.log("res===>", res); // Check the response to see the image URL
+        if (!res?.data?.error) {
+          handleOpenSnackbar("Profile updated successfully.");
+          getProfileDetails();
+        } else {
+          handleOpenSnackbar("Failed to upload, please retry");
+        }
       };
-  
+
       const formData = new FormData();
-      formData.append('image', selectedImage);  // Add the image file
-      formData.append('project_id', projectId); // Add project ID
-      formData.append('userName', userName);    // Add user name
-  
+      formData.append("image", selectedImage); // Add the image file
+      formData.append("project_id", projectId); // Add project ID
+      formData.append("userName", userName); // Add user name
+
       // Send the request with FormData. Do not manually set the Content-Type header.
       sendRequest(
         {
           request: "post",
           url: `http://localhost:8080/expense_tracker/upload_image/`,
-          body: formData,  // Send the FormData as the body
+          body: formData, // Send the FormData as the body
         },
         resData
       );
@@ -58,7 +70,15 @@ const ContactDetails = () => {
       console.log(e);
     }
   };
-  
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
+  };
+
+  const handleOpenSnackbar = (message) => {
+    setOpenSnackbar(true);
+    setToasterMessage(message);
+  };
 
   return (
     <React.Fragment>
@@ -83,16 +103,18 @@ const ContactDetails = () => {
           id="outlined-basic"
           label="Name"
           variant="outlined"
-          onChange={(e)=>{
-            setUserName(e.target.value)
+          onChange={(e) => {
+            setUserName(e.target.value);
           }}
           value={userName}
         />
-        <div style={{
-          width : "100%",
-          display : "flex",
-          flexDirection : "column"
-        }}>
+        <div
+          style={{
+            width: "100%",
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
           <input
             accept="image/*"
             style={{ display: "none" }}
@@ -101,33 +123,40 @@ const ContactDetails = () => {
             onChange={handleImageChange}
           />
           <label htmlFor="upload-button">
-            <Button variant="contained" color="primary" component="span" startIcon={<FileUploadIcon />}>
+            <Button
+              variant="contained"
+              color="primary"
+              component="span"
+              startIcon={<FileUploadIcon />}
+            >
               Upload Profile Photo
             </Button>
           </label>
           {selectedImageUrl && (
-            <div style={{ marginTop: 16,  position : "relative" }}>
+            <div style={{ marginTop: 16, position: "relative" }}>
               <img
                 src={selectedImageUrl}
                 alt="Selected"
                 style={{ width: "100%", maxWidth: "300px" }}
               />
-              <CloseIcon sx={{
-                position : "absolute",
-                left : "289px",
-                top : "-11px",
-                cursor : 'pointer'
-              }}
-              onClick = {()=>{
-                setSelectedImageUrl(null);
-                setSelectedImage(null);
-              }}
+              <CloseIcon
+                sx={{
+                  position: "absolute",
+                  left: "289px",
+                  top: "-11px",
+                  cursor: "pointer",
+                }}
+                onClick={() => {
+                  setSelectedImageUrl(null);
+                  setSelectedImage(null);
+                }}
               />
             </div>
           )}
         </div>
       </Box>
-  {userName && <Box
+      {userName && (
+        <Box
           sx={{
             "& button": { m: 0 },
             width: "100%",
@@ -136,12 +165,28 @@ const ContactDetails = () => {
             justifyContent: "center",
           }}
         >
-          <Button onClick={()=>{
-            imageUploadHandler()
-          }}  variant="contained" size="large">
+          <Button
+            onClick={() => {
+              imageUploadHandler();
+            }}
+            variant="contained"
+            size="large"
+          >
             Submit
           </Button>
-        </Box>}
+        </Box>
+      )}
+      <Toaster
+        open={openSnackbar}
+        onClose={handleCloseSnackbar}
+        toasterMessage={toasterMessage}
+      />
+      <Backdrop
+        sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
+        open={loading}
+      >
+        <GradientCircularBar />
+      </Backdrop>
     </React.Fragment>
   );
 };

@@ -22,7 +22,7 @@ def _upload_image(project_id,user_name, image_file):
             }
 
             res = execute_query('update_profile',params)
-            return JsonResponse({"status": "success", "image_url": image_url})
+            return res
 
         return JsonResponse({"status": "error", "message": "No image uploaded"}, status=400)
 

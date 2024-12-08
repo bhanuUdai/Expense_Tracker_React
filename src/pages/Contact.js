@@ -12,7 +12,6 @@ const Contact =()=>
     const { error, sendRequest } = useHttp();
     const [contactPage,setContactPage]=useState(null)
     const token=useSelector(state=>state.auth.token)
-    const expctx=useContext(ExpenseContext)
     const location = useLocation();
     const projectId = location?.pathname?.split('/').pop();
 
@@ -30,53 +29,41 @@ const Contact =()=>
       }
 
     }
+
+    const getProfileDetails = () =>{
+      try {
+        let payLoad = {
+          project_id :projectId
+        }
+        sendRequest(
+          {
+            request: 'get',
+            url: `http://localhost:8080/expense_tracker/check_user_profile/`,
+            body: payLoad,
+            header: { "Content-Type": "application/json" },
+          },
+          resData
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    }
     
       useEffect(() => {
         async function getData() {
-          try {
-            let payLoad = {
-              project_id :projectId
-            }
-            sendRequest(
-              {
-                request: 'get',
-                url: `http://localhost:8080/expense_tracker/check_user_profile/`,
-                body: payLoad,
-                header: { "Content-Type": "application/json" },
-              },
-              resData
-            );
-            // try {
-                
-            //   console.log(res.data.users[0]);
-            //     const details=res.data.users[0]
-            //     expctx.userDetails({name:details.displayName,url:details.photoUrl})
-            //     if(details.displayName && details.photoUrl )
-            //     {
-            //       setContactPage(false)
-            //     }
-            //     else{
-            //       setContactPage(true)
-            //     }
-        
-            // } catch (err) {
-            //   console.log(err);
-            // }
-          } catch (err) {
-            console.log(err);
-          }
+          getProfileDetails();
         }
         getData();
       }, []);
 
       const editButtonhandler=()=>
       {
-        setContactPage(true)
+        setContactPage(false)
       }
 
 
     return(<React.Fragment>
-      {contactPage===false && <ContactDetails  />}
+      {contactPage===false && <ContactDetails getProfileDetails = {getProfileDetails}  />}
       { contactPage && <SavedContact editButton={editButtonhandler} contactPageDetails = {contactPage} />}
     </React.Fragment>)
 }
