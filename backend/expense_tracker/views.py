@@ -20,6 +20,8 @@ from rest_framework.permissions import AllowAny
 from django.views.decorators.csrf import csrf_exempt
 from expense_tracker.helper.permissions import has_permission
 
+from expense_tracker.image_upload import _upload_image, _check_user_profile
+
 
 
 @api_view(['POST'])
@@ -158,3 +160,43 @@ def user_login(request):
         'res' : data[0],
         'error' : False
     },status = 200)
+
+
+@api_view(['POST'])
+@csrf_exempt
+@permission_classes([AllowAny])  # No authentication required
+@authentication_classes([])     # Skip authentication mechanism
+def upload_image(request):
+    project_id = request.data.get('project_id')
+    user_name = request.data.get('userName')
+    image_file = request.FILES.get('image')
+    if not user_name and not image_file:
+        return Response({
+            'error' : True,
+            'message': 'All fields are required.'
+        },status = 400)
+    res = _upload_image(project_id,user_name, image_file)
+    return Response({
+        'res' : res,
+        'error' : False
+    },status = 200)
+
+@api_view(['GET'])
+def check_user_profile(request):
+    project_id = request.query_params.get('project_id')
+    print("Check Profile==>", project_id)
+    
+    res = _check_user_profile(project_id)
+    if isinstance(res, dict) and 'error' in res:
+        # Handle error returned from `execute_query`
+        return Response({
+            'res': None,
+            'error': True,
+            'message': res.get('message', 'An error occurred.'),
+            'code': res.get('code', 500)
+        }, status=res.get('code', 500))
+    
+    return Response({
+        'res': res,
+        'error': False
+    }, status=200)

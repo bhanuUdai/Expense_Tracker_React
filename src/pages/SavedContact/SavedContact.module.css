@@ -36,10 +36,11 @@
 }
 .photo_div img{
     margin-top: 2%;
-    border-radius: 50%;
+    /* border-radius: 50%; */
     /* border: 17px; */
     margin-bottom: 6%;
     display: block;
+    width: 100%;
 }
 
 .title{

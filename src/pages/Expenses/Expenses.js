@@ -1,23 +1,8 @@
 import React from "react";
-import classes from "./Expenses.module.css";
 
 //MUI
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import Input from "@mui/material/Input";
-import FilledInput from "@mui/material/FilledInput";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import InputLabel from "@mui/material/InputLabel";
-import InputAdornment from "@mui/material/InputAdornment";
-import FormHelperText from "@mui/material/FormHelperText";
-import FormControl from "@mui/material/FormControl";
-import TextField from "@mui/material/TextField";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
-import { Typography } from "@mui/material";
 import { Button } from "@mui/material";
-import MenuItem from "@mui/material/MenuItem";
-
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -30,33 +15,6 @@ const Expenses = ({ expenseArr, editButtonHandler, deleteButtonHandler }) => {
   console.log("inside expense");
   return (
     <React.Fragment>
-      {/* <main  className={classes.main}>
-        <span>
-          <h3>Amount :</h3>
-          <h2 className={classes.items}>$ {prop.items.amount}</h2>
-        </span>
-        <span>
-          <h3>Description :</h3>
-          <h2 className={classes.items}>{prop.items.description}</h2>
-        </span>
-        <span>
-          <h3>Category :</h3>
-          <h2 className={classes.items}>{prop.items.category}</h2>
-        </span>
-        <button
-          onClick={() => prop.editButtonClicked(prop.items)}
-          className={classes.edit_button}
-        >
-          EDIT
-        </button>
-        <button
-          onClick={() => prop.deleteButtonClicked(prop.items.Id)}
-          className={classes.delete_button}
-        >
-          DELETE
-        </button>
-      </main> */}
-
       <TableContainer component={Paper}>
         <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
           <TableHead>

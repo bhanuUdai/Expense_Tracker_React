@@ -2,9 +2,10 @@
 import os
 import yaml
 from django.conf import settings
-from django.db import connection
+from django.db import connection, DatabaseError
 import re
 from jinja2 import Template
+
 
 
 
@@ -63,8 +64,24 @@ def execute_query(query_name, params = None):
 
             # print("result==>", results)  # Print the result with column names
             return results
+    except ValueError as e:
+        return {
+            "error": "InvalidQuery",
+            "message": str(e),
+            "code": 400  # Bad Request
+        }
+    except DatabaseError as e:
+        return {
+            "error": "DatabaseError",
+            "message": str(e),
+            "code": 500  # Internal Server Error
+        }
     except Exception as e:
-        return
+        return {
+            "error": "UnknownError",
+            "message": str(e),
+            "code": 500  # Internal Server Error
+        }
 
 
     

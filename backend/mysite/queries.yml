@@ -20,12 +20,22 @@ edit_expense: |
   RETURNING amount, description, category 
 
 get_user_id: |
-  SELECT id, email FROM users WHERE firebase_uid = '{{firebase_uid}}'
+  SELECT id, email FROM users WHERE firebase_uid = '{{ firebase_uid }}'
 
 create_user: |
   INSERT INTO users (firebase_uid, email)
-  VALUES ('{{firebase_uid}}', '{{email}}')
+  VALUES ('{{ firebase_uid }}', '{{ email }}')
   RETURNING  id, email
 
 get_user_details: |
-  SELECT * FROM users WHERE id = '{{project_id}}'
+  SELECT * FROM users WHERE id = '{{ project_id }}'
+
+update_profile: |
+  INSERT INTO user_profile.profile (user_id, name, profile_photo)
+  VALUES ({{id}}, '{{ user_name }}', '{{ image }}')
+  RETURNING name, profile_photo
+
+check_user_profile: |
+  SELECT * FROM user_profile.profile 
+  WHERE user_id = {{ id }}
+  ORDER BY created_at DESC

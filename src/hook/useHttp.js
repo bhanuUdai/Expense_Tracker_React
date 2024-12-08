@@ -3,11 +3,13 @@ import { useState, useCallback } from "react";
 
 const useHttp = () => {
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const sendRequest = useCallback(async (requestConfig, resData) => {
     setError(null);
 
     try {
+      setLoading(true);
       let res;
       let authToken = (localStorage.getItem('ExpenseToken'));
 
@@ -15,7 +17,7 @@ const useHttp = () => {
 
       let headers = {
         ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
-        'Content-Type': 'application/json'
+        // 'Content-Type': 'application/json'
       };
       // if(requestConfig?.header){
       //   headers = requestConfig?.header;
@@ -49,9 +51,11 @@ const useHttp = () => {
     } catch (err) {
       setError(err.message);
       console.log(err);
+    }finally{
+      setLoading(false);
     }
   }, []);
 
-  return { error, sendRequest };
+  return { error, sendRequest, loading };
 };
 export default useHttp;

@@ -13,6 +13,9 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from corsheaders.defaults import default_headers
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -43,7 +46,8 @@ INSTALLED_APPS = [
     # PROJECT APPS
     'expense_tracker',
     'rest_framework',
-    'corsheaders'
+    'corsheaders',
+    'cloudinary',
     ]
 
 #Instead of using os.path.join to form a file path, directly reference your middleware function in Python module notation,
@@ -92,6 +96,22 @@ REST_FRAMEWORK = {
     ],
 }
 
+
+# Cloudinary Settings
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dmumo0t3s',
+    'API_KEY': '424428425738772',
+    'API_SECRET': 'FPbO4sGffEMMT7SV63GJEq7MBbo',
+}
+
+# Set up Cloudinary config
+cloudinary.config(
+    cloud_name="dmumo0t3s", 
+    api_key="424428425738772", 
+    api_secret="FPbO4sGffEMMT7SV63GJEq7MBbo"
+)
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 

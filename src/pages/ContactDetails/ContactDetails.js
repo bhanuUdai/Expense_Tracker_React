@@ -9,74 +9,59 @@ import { Typography } from "@mui/material";
 import { Button } from "@mui/material";
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import CloseIcon from '@mui/icons-material/Close';
+import useHttp from "../../hook/useHttp";
+import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
+
 
 const ContactDetails = () => {
   const history = useHistory();
 
+  const [selectedImageUrl, setSelectedImageUrl] = useState(null);
   const [selectedImage, setSelectedImage] = useState(null);
   const [userName, setUserName] = useState("");
+  const location = useLocation();
+
+  const { error, sendRequest, loading } = useHttp();
+
+  const projectId = location?.pathname?.split('/').pop();
 
   // Handle file selection
   const handleImageChange = (event) => {
     const file = event.target.files[0]; // Only the first file is selected
+    setSelectedImage(file)
     if (file) {
-      setSelectedImage(URL.createObjectURL(file));
+      setSelectedImageUrl(URL.createObjectURL(file));
     }
   };
-  const detailSubmithandler = async (event) => {
-    event.preventDefault();
+ 
+  const imageUploadHandler = async () => {
     try {
-      const userProfile = ""
-
-      const contactObj = {
-        idToken: localStorage.getItem("ExpenseToken"),
-        displayName: userName,
-        photoUrl: userProfile,
-        returnSecureToken: true,
+      const resData = (res) => {
+        console.log("res===>", res); // Check the response to see the image URL
       };
-
-      if (userName.trim().length > 0 && userProfile.trim().length > 0) {
-        const res = await axios.post(
-          "https://identitytoolkit.googleapis.com/v1/accounts:update?key=AIzaSyDOZNhzovobc8xMZkIos38RezyXZNWLWXQ",
-          contactObj,
-          {
-            headers: { "Content-Type": "application/json" },
-          }
-        );
-        try {
-          console.log(res);
-          // userNameRef.current.value = "";
-          // userProfileUrlRef.current.value = "";
-        } catch (err) {
-          console.log(err);
-        }
-      } else {
-        alert("Fill all the fields");
-      }
-    } catch (err) {
-      console.log(err);
+  
+      const formData = new FormData();
+      formData.append('image', selectedImage);  // Add the image file
+      formData.append('project_id', projectId); // Add project ID
+      formData.append('userName', userName);    // Add user name
+  
+      // Send the request with FormData. Do not manually set the Content-Type header.
+      sendRequest(
+        {
+          request: "post",
+          url: `http://localhost:8080/expense_tracker/upload_image/`,
+          body: formData,  // Send the FormData as the body
+        },
+        resData
+      );
+    } catch (e) {
+      console.log(e);
     }
   };
-
-  const cancelHandler = (event) => {
-    event.preventDefault();
-    history.push("/welcome");
-  };
+  
 
   return (
     <React.Fragment>
-      {/* <form>
-        <h4>Contact Details</h4>
-        <label htmlFor="name">Full Name</label>
-        <input  ref={userNameRef} type="text" id="name"></input>
-        <label htmlFor="url_">Profile Photo URL</label>
-        <input  ref={userProfileUrlRef} type="url" id="url_"></input>
-        <div className={classes.button_div}>
-          <button onClick={detailSubmithandler} className={classes.update_btn}>update</button>
-          <button onClick={cancelHandler} className={classes.cancel_button}>cancel</button>
-        </div>
-      </form> */}
-
       <Box
         sx={{
           display: "flex",
@@ -120,10 +105,10 @@ const ContactDetails = () => {
               Upload Profile Photo
             </Button>
           </label>
-          {selectedImage && (
+          {selectedImageUrl && (
             <div style={{ marginTop: 16,  position : "relative" }}>
               <img
-                src={selectedImage}
+                src={selectedImageUrl}
                 alt="Selected"
                 style={{ width: "100%", maxWidth: "300px" }}
               />
@@ -134,6 +119,7 @@ const ContactDetails = () => {
                 cursor : 'pointer'
               }}
               onClick = {()=>{
+                setSelectedImageUrl(null);
                 setSelectedImage(null);
               }}
               />
@@ -150,7 +136,9 @@ const ContactDetails = () => {
             justifyContent: "center",
           }}
         >
-          <Button  variant="contained" size="large">
+          <Button onClick={()=>{
+            imageUploadHandler()
+          }}  variant="contained" size="large">
             Submit
           </Button>
         </Box>}
