@@ -1,9 +1,6 @@
-# expense_tracker/authentication.py
-
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 from firebase_admin import auth
-from django.http import JsonResponse
 import json
 
 class FirebaseUser:
@@ -28,17 +25,14 @@ class FirebaseAuthentication(BaseAuthentication):
             user = FirebaseUser(decoded_token)
             return (user, None)
         except auth.ExpiredIdTokenError:
-                print("Token expired")
-                return AuthenticationFailed({'status': 'error', 'message': 'Token expired'}, status=401)
+            print("Token expired")
+            raise AuthenticationFailed("Token expired")  # Return error message directly
         except auth.InvalidIdTokenError:
             print("Invalid token")
-            return AuthenticationFailed({'status': 'error', 'message': 'Invalid token'}, status=401)
+            raise AuthenticationFailed("Invalid token")  # Return error message directly
         except auth.RevokedIdTokenError:
             print("Token has been revoked")
-            return AuthenticationFailed({'status': 'error', 'message': 'Token has been revoked'}, status=401)
+            raise AuthenticationFailed("Token has been revoked")  # Return error message directly
         except Exception as e:
             print("Token verification failed:", str(e))
-            return AuthenticationFailed({'status': 'error', 'message': 'Unauthorized', 'details': str(e)}, status=401)
-        except Exception as e:
-            raise AuthenticationFailed(f'Firebase authentication failed: {str(e)}')
-
+            raise AuthenticationFailed(f'Firebase authentication failed: {str(e)}')  # Handle any other errors
