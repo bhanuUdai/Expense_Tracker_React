@@ -25,7 +25,6 @@ const ContactDetails = ({ getProfileDetails }) => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [toasterMessage, setToasterMessage] = useState(false);
   const location = useLocation();
-
   const { error, sendRequest, loading } = useHttp();
 
   console.log("Loading==>", loading);

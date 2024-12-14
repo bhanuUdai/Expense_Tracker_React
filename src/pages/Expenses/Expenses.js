@@ -38,42 +38,6 @@ const Expenses = ({ expenseArr, editButtonHandler, deleteButtonHandler }) => {
                 </TableCell>
                 <TableCell align="right">{row.description}</TableCell>
                 <TableCell align="right">{row.category}</TableCell>
-                {/* <TableCell align="right" >
-                  {" "}
-                  <Box
-                    sx={{
-                      width: "fit-content",
-                      display: "flex",
-                      flexDirection: "row",
-                      gap: "20px",
-                      justifyContent: "end",
-                    }}
-                  >
-                    <Button
-                      sx={
-                        {
-                          // width: "100%",
-                        }
-                      }
-                      variant="contained"
-                      // onClick={submitHandler}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      sx={
-                        {
-                          // width: "100%",
-                        }
-                      }
-                      variant="contained"
-                      // onClick={submitHandler}
-                    >
-                      Delete
-                    </Button>
-                  </Box>
-                </TableCell> */}
-
                 <TableCell align="right" sx={{ width: "200px" }}>
                   {" "}
                   <Box

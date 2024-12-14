@@ -1,24 +1,22 @@
 import React, { useRef, useState, useEffect } from "react";
 import Expenses from "./Expenses";
-import classes from "./ExpensesForm.module.css";
+
 import useHttp from "../../hook/useHttp";
 import { useDispatch, useSelector } from "react-redux";
 import { expenseAction } from "../../store/expense-reducer";
 import { themeAction } from "../../store/theme-reducer";
 
+import ExpensePieChart from "./ExpensePieChart";
+import { categoryList } from "../../helper/ExpenseHelper";
+import ExpenseDetails from "./ExpenseDetails";
+
 //MUI
 import Box from "@mui/material/Box";
-import IconButton from "@mui/material/IconButton";
-import Input from "@mui/material/Input";
-import FilledInput from "@mui/material/FilledInput";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import InputLabel from "@mui/material/InputLabel";
 import InputAdornment from "@mui/material/InputAdornment";
-import FormHelperText from "@mui/material/FormHelperText";
 import FormControl from "@mui/material/FormControl";
 import TextField from "@mui/material/TextField";
-import Visibility from "@mui/icons-material/Visibility";
-import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { Typography } from "@mui/material";
 import { Button } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
@@ -27,43 +25,24 @@ import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import Toaster from "../../elements/Toaster";
 const ExpensesForm = () => {
   const expenseArr = useSelector((state) => state.expense.expenses);
-  const premiumButton = useSelector((state) => state.expense.premiumButton);
-  const premium = useSelector((state) => state.theme.onPremium);
   const [isEditId, setIsEditId] = useState(null);
-  const enteredAmountRef = useRef();
-  const enteredDesRef = useRef();
-  const enteredCatRef = useRef();
   const { error, sendRequest } = useHttp();
   const dispatch = useDispatch();
-  const userMail = useSelector((state) => state.auth.useremail);
-
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [toasterMessage, setToasterMessage] = useState(false);
 
-  const [amount, setAmount] = useState(0);
+  const [amount, setAmount] = useState(null);
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("grocery");
   const location = useLocation();
-  const projectId = location?.pathname?.split('/').pop();
+  const projectId = location?.pathname?.split("/").pop();
 
   useEffect(() => {
-
-    // sendRequest(
-    //   {
-    //     request: "get",
-    //     url: `https://react-expense-tracker-8cc99-default-rtdb.firebaseio.com/${userMail}.json`,
-    //     header: { "Content-Type": "application/json " },
-    //   },
-    //   resData
-    // );
     getExpenses();
-    console.log("CHECk")
- 
   }, []);
 
-  const getExpenses = ()=>{
-    try{
-
+  const getExpenses = () => {
+    try {
       const resData = (res) => {
         let arr = [];
         for (const prop of res?.data?.res) {
@@ -78,10 +57,10 @@ const ExpensesForm = () => {
       };
 
       let payLoad = {
-        project_id : projectId
-      }
+        project_id: projectId,
+      };
 
-      console.log('payLoad==>',payLoad);
+      console.log("payLoad==>", payLoad);
       sendRequest(
         {
           request: "get",
@@ -91,11 +70,10 @@ const ExpensesForm = () => {
         },
         resData
       );
-
-    }catch(e){
+    } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   const handleOpenSnackbar = (message) => {
     setOpenSnackbar(true);
@@ -124,7 +102,7 @@ const ExpensesForm = () => {
 
     let payLoad = {
       id: data,
-      project_id : projectId
+      project_id: projectId,
     };
     sendRequest(
       {
@@ -139,7 +117,7 @@ const ExpensesForm = () => {
 
   const addExpenseHandler = async (event) => {
     try {
-      console.log("addExpenseHandler==>",isEditId);
+      console.log("addExpenseHandler==>", isEditId);
       event.preventDefault();
       const enteredAmount = amount;
       const enteredDes = description;
@@ -150,7 +128,6 @@ const ExpensesForm = () => {
         description: enteredDes,
         category: enteredCat,
       };
-
 
       if (
         !(
@@ -165,17 +142,17 @@ const ExpensesForm = () => {
         if (isEditId === null) {
           console.log("post");
           const resData = (res) => {
-            if(res?.data?.error){
+            if (res?.data?.error) {
               handleOpenSnackbar("Something went wrong, please retry");
-            }else{
+            } else {
               getExpenses();
             }
           };
 
           let payLoad = {
             ...expenseObj,
-            project_id : projectId
-          }
+            project_id: projectId,
+          };
 
           sendRequest(
             {
@@ -197,7 +174,7 @@ const ExpensesForm = () => {
           let payLoad = {
             ...expenseObj,
             id: isEditId,
-            project_id : projectId
+            project_id: projectId,
           };
 
           console.log("payLoad==>", payLoad);
@@ -213,10 +190,6 @@ const ExpensesForm = () => {
           );
         }
       }
-
-      // enteredAmountRef.current.value = "";
-      // enteredDesRef.current.value = "";
-      // enteredCatRef.current.value = "";
 
       setAmount(0);
       setDescription("");
@@ -265,27 +238,12 @@ const ExpensesForm = () => {
 
   const blob = new Blob([makeCSV(expenseArr)]);
 
-  const categoryList = [
-    {
-      value: "grocery",
-      label: "Grocery",
-    },
-    {
-      value: "fuel",
-      label: "Fuel",
-    },
-    {
-      value: "medicine",
-      label: "Medicine",
-    },
-    {
-      value: "vegetable",
-      label: "Vegetable",
-    },
-  ];
-
   return (
-    <React.Fragment>
+    <Box
+      sx={{
+        padding: "20px",
+      }}
+    >
       {/* {error && <h1 className={classes.error_heading}>{`${error}!!! :(`}</h1>} */}
       <Toaster
         open={openSnackbar}
@@ -296,82 +254,91 @@ const ExpensesForm = () => {
       <Box
         sx={{
           display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
+          flexDirection: "row",
           gap: "20px",
-          margin: "80px auto auto auto",
-          width: "80vw",
         }}
       >
-        <Typography variant="h5" gutterBottom>
-          Expense Form
-        </Typography>
-
-        <FormControl fullWidth sx={{ m: 0 }}>
-          <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
-          <OutlinedInput
-            onChange={(e) => setAmount(e.target.value)}
-            id="outlined-adornment-amount"
-            startAdornment={<InputAdornment position="start">$</InputAdornment>}
-            label="Amount"
-            value={amount}
-          />
-        </FormControl>
-
-        <TextField
-          onChange={(e) => setDescription(e.target.value)}
-          fullWidth
-          id="outlined-multiline-flexible"
-          label="Description"
-          multiline
-          maxRows={4}
-          value={description}
-        />
-
-        <TextField
-          fullWidth
-          id="outlined-select-currency"
-          select
-          label="Select category"
-          defaultValue={category}
-          onChange={(e) => setCategory(e.target.value)}
-          value={category}
-          // helperText="Please select your currency"
-        >
-          {categoryList.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-              {option.label}
-            </MenuItem>
-          ))}
-        </TextField>
-
         <Box
           sx={{
-            "& button": { m: 0 },
-            width: "100%",
             display: "flex",
+            flexDirection: "column",
             alignItems: "center",
-            justifyContent: "center",
+            gap: "20px",
+            margin: "0px auto auto auto",
+            width: "80vw",
           }}
         >
-          <Button onClick={addExpenseHandler} variant="contained" size="small">
-            Submit
-          </Button>
+          <Typography variant="h5" fontWeight="bold" >
+            Expense Form
+          </Typography>
+
+          <FormControl fullWidth sx={{ m: 0 }}>
+            <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
+            <OutlinedInput
+              onChange={(e) => setAmount(e.target.value)}
+              id="outlined-adornment-amount"
+              startAdornment={
+                <InputAdornment position="start">$</InputAdornment>
+              }
+              label="Amount"
+              value={amount}
+            />
+          </FormControl>
+
+          <TextField
+            onChange={(e) => setDescription(e.target.value)}
+            fullWidth
+            id="outlined-multiline-flexible"
+            label="Description"
+            multiline
+            maxRows={4}
+            value={description}
+          />
+
+          <TextField
+            fullWidth
+            id="outlined-select-currency"
+            select
+            label="Select category"
+            defaultValue={category}
+            onChange={(e) => setCategory(e.target.value)}
+            value={category}
+            // helperText="Please select your currency"
+          >
+            {categoryList.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </TextField>
+
+          <Box
+            sx={{
+              "& button": { m: 0 },
+              width: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <Button
+              onClick={addExpenseHandler}
+              variant="contained"
+              size="small"
+            >
+              Submit
+            </Button>
+          </Box>
         </Box>
+        <ExpenseDetails
+          expenseArr={expenseArr}
+          editButtonHandler={editButtonHandler}
+          deleteButtonHandler={deleteButtonHandler}
+        />
       </Box>
 
-      <section className={classes.section}>
-        <h2 className={classes.heading}>Your Expenses</h2>
-        {expenseArr.length > 0 && (
-          <Expenses
-            expenseArr={expenseArr}
-            key={Math.random()}
-            editButtonHandler={editButtonHandler}
-            deleteButtonHandler={deleteButtonHandler}
-          />
-        )}
-      </section>
-    </React.Fragment>
+      {expenseArr.length > 0 && <ExpensePieChart expenseArr={expenseArr} />}
+    </Box>
   );
 };
 export default ExpensesForm;
