@@ -1,59 +1,4 @@
-// import React from "react";
-// import classes from "./Header.module.css";
-// import { NavLink, useHistory } from "react-router-dom";
-// import { useSelector,useDispatch } from "react-redux";
-// import { authAction } from "../store/auth-reducer";
-// import { themeAction } from "../store/theme-reducer";
-// const Header = () => {
-//   const isLogin=useSelector(state=>state.auth.token)
-//   const premium=useSelector((state)=>state.theme.onPremium)
-//   const theme=useSelector((state)=>state.theme.theme)
-//   const dispatch=useDispatch()
-//   const history = useHistory();
-//   const userlogOuthandler = () => {
-//     dispatch(authAction.removeExpenseToken())
-//     dispatch(authAction.removeUserEmail())
-//     history.replace("/");
-//   };
-
-
-//   const themeChangeHandler=()=>
-//   {
-//     dispatch(themeAction.toggleTheme())
-//   }
-
-
-//   return (
-//     <React.Fragment>
-//       <header className={classes.header}>
-//         <ul >
-//           <li>
-//           <NavLink className={classes.expense_link} activeClassName={classes.expense_active} to="/welcome">Home</NavLink>
-//           </li>
-//           <li >
-//             <NavLink className={classes.expense_link} activeClassName={classes.expense_active} to="/expenses">Expenses</NavLink>
-//           </li>
-//           <li>
-//             {isLogin && <button
-//               onClick={userlogOuthandler}
-//               className={classes.logout_button}
-//             >
-//               Log Out
-//             </button>}
-//           </li>
-//           <li>
-//             {premium &&isLogin && <button className={classes.logout_button} onClick={themeChangeHandler} >{theme ? 'light mode':"dark mode"}</button>}
-//           </li>
-//         </ul>
-//       </header>
-//     </React.Fragment>
-//   );
-// };
-// export default Header;
-
-
-
-import * as React from 'react';
+import React from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -63,12 +8,11 @@ import Menu from '@mui/material/Menu';
 import MenuIcon from '@mui/icons-material/Menu';
 import Container from '@mui/material/Container';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
-import { useHistory, useLocation } from 'react-router-dom/cjs/react-router-dom.min';
-import { useDispatch, useSelector } from 'react-redux';
+import { NavLink, useHistory, useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { authAction } from '../store/auth-reducer';
 
 const pages = ['Home', 'Expenses'];
@@ -80,46 +24,28 @@ function ResponsiveAppBar() {
 
   const history = useHistory();
   const dispatch = useDispatch();
-
   const location = useLocation();
   const projectId = location?.pathname?.split('/').pop();
-
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
+
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
   };
 
   const userlogOuthandler = () => {
-    dispatch(authAction.removeExpenseToken())
-    dispatch(authAction.removeUserEmail())
-    dispatch(authAction.setProjectId(""))
+    dispatch(authAction.removeExpenseToken());
+    dispatch(authAction.removeUserEmail());
+    dispatch(authAction.setProjectId(""));
     history.replace("/");
-  };
-
-  const handleCloseNavMenu = (e) => {
-    let selectedNav = e?.target?.innerText;
-    selectedNav = selectedNav.toLowerCase();
-    console.log("BHANU==>",selectedNav);
-    setAnchorElNav(null);
-    if(selectedNav === "home"){
-      history.push(`/welcome/${projectId}`);
-    }else{
-      history.push(`/${selectedNav}/${projectId}`);
-    }
   };
 
   const handleCloseUserMenu = (key) => {
     setAnchorElUser(null);
-    switch (key) {
-      case 'Logout':
-        userlogOuthandler()
-        break;
-    
-      default:
-        break;
+    if (key === 'Logout') {
+      userlogOuthandler();
     }
   };
 
@@ -131,8 +57,7 @@ function ResponsiveAppBar() {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component="div"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -170,22 +95,31 @@ function ResponsiveAppBar() {
                 horizontal: 'left',
               }}
               open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+              onClose={() => setAnchorElNav(null)}
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                <MenuItem key={page}>
+                  <NavLink
+                    to={page === 'Home' ? `/welcome/${projectId}` : `/${page.toLowerCase()}/${projectId}`}
+                    activeClassName="active-link"
+                    style={{
+                      textDecoration: 'none',
+                      color: 'inherit',
+                    }}
+                  >
+                    <Typography textAlign="center">{page}</Typography>
+                  </NavLink>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
+
           <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component="div"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -199,17 +133,28 @@ function ResponsiveAppBar() {
           >
             LOGO
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, gap : "10px" }}>
+
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' }, gap: '10px' }}>
             {pages.map((page) => (
-              <Button
+              <NavLink
                 key={page}
-                onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                to={page === 'Home' ? `/welcome/${projectId}` : `/${page.toLowerCase()}/${projectId}`}
+                activeClassName="active-link"
+                style={{
+                  textDecoration: 'none',
+                  color: 'white',
+                  padding: '10px',
+                  borderRadius: '5px',
+                }}
+                activeStyle={{
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                }}
               >
                 {page}
-              </Button>
+              </NavLink>
             ))}
           </Box>
+
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
@@ -230,11 +175,11 @@ function ResponsiveAppBar() {
                 horizontal: 'right',
               }}
               open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+              onClose={() => setAnchorElUser(null)}
             >
               {settings.map((setting) => (
-                <MenuItem  key={setting} onClick={()=> handleCloseUserMenu(setting)}>
-                  <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
+                <MenuItem key={setting} onClick={() => handleCloseUserMenu(setting)}>
+                  <Typography textAlign="center">{setting}</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -244,6 +189,5 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
+
 export default ResponsiveAppBar;
-
-

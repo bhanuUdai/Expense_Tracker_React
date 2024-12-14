@@ -13,7 +13,7 @@ const useHttp = () => {
       let res;
       let authToken = (localStorage.getItem('ExpenseToken'));
 
-      console.log("requestConfig==>", requestConfig, authToken);
+      // console.log("requestConfig==>", requestConfig, authToken);
 
       let headers = {
         ...(authToken ? { Authorization: `Bearer ${authToken}` } : {}),
@@ -35,7 +35,6 @@ const useHttp = () => {
           headers: headers,
         })
       } else {
-        console.log("BHANU==>",requestConfig);
         res= await axios({
           cancelToken : null,
           method: requestConfig.request || 'get',
@@ -46,10 +45,9 @@ const useHttp = () => {
         })
       }
 
-      console.log("response A==>",res);
       resData(res);
     } catch (err) {
-      setError(err.message);
+      setError(err.response?.data?.error?.errors[0]?.message || err.message || "Something went wrong");
       console.log(err);
     }finally{
       setLoading(false);

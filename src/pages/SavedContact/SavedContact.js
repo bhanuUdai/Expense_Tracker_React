@@ -10,7 +10,7 @@ import { Box } from "@mui/material";
 
 export default function SavedContact({ contactPageDetails, ...prop }) {
   return (
-    <Card sx={{ maxWidth: "50vw", margin: "100px auto auto auto" }}>
+    <Card sx={{ maxWidth: "50vw", margin: "auto auto auto auto" }}>
       <Typography
         variant="h6"
         component="div"

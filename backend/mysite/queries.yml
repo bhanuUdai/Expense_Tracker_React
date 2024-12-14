@@ -39,3 +39,4 @@ check_user_profile: |
   SELECT * FROM user_profile.profile 
   WHERE user_id = {{ id }}
   ORDER BY created_at DESC
+  LIMIT 1;

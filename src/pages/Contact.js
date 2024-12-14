@@ -20,14 +20,12 @@ const Contact =()=>
       };
 
     const resData = (res)=>{
-      console.log(res);
       res = res?.data
       if(!res?.error && res?.res.length>0){
         setContactPage(res?.res)
       }else{
         setContactPage(false)
       }
-
     }
 
     const getProfileDetails = () =>{

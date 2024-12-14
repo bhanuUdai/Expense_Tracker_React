@@ -88,7 +88,7 @@ const ContactDetails = ({ getProfileDetails }) => {
           flexDirection: "column",
           alignItems: "center",
           gap: "20px",
-          margin: "80px auto auto auto",
+          margin: "auto auto auto auto",
           width: "80vw",
         }}
       >
@@ -97,7 +97,7 @@ const ContactDetails = ({ getProfileDetails }) => {
         </Typography>
 
         <TextField
-          l
+          
           fullWidth
           sx={{ m: 0 }}
           id="outlined-basic"
