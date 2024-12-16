@@ -27,7 +27,6 @@ const ContactDetails = ({ getProfileDetails }) => {
   const location = useLocation();
   const { error, sendRequest, loading } = useHttp();
 
-  console.log("Loading==>", loading);
 
   const projectId = location?.pathname?.split("/").pop();
 

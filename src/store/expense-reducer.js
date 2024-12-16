@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialExpense = { expenses: [], premiumButton: false };
+const initialExpense = { expenses: [], premiumButton: false,};
 
 const expenseSlice = createSlice({
   name: "expenses",

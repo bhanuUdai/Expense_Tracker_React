@@ -22,6 +22,7 @@ import { Button } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 
+
 import Toaster from "../../elements/Toaster";
 const ExpensesForm = () => {
   const expenseArr = useSelector((state) => state.expense.expenses);
@@ -242,6 +243,7 @@ const ExpensesForm = () => {
     <Box
       sx={{
         padding: "20px",
+        minHeight: "calc(100vh - 104px)",
       }}
     >
       {/* {error && <h1 className={classes.error_heading}>{`${error}!!! :(`}</h1>} */}
@@ -256,6 +258,7 @@ const ExpensesForm = () => {
           display: "flex",
           flexDirection: "row",
           gap: "20px",
+         
         }}
       >
         <Box
@@ -330,11 +333,11 @@ const ExpensesForm = () => {
             </Button>
           </Box>
         </Box>
-        <ExpenseDetails
+        {expenseArr && expenseArr.length > 0 && <ExpenseDetails
           expenseArr={expenseArr}
           editButtonHandler={editButtonHandler}
           deleteButtonHandler={deleteButtonHandler}
-        />
+        />}
       </Box>
 
       {expenseArr.length > 0 && <ExpensePieChart expenseArr={expenseArr} />}

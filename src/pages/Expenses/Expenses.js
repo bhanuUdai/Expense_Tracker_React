@@ -10,6 +10,10 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from '@mui/material/IconButton';
+
 
 const Expenses = ({ expenseArr, editButtonHandler, deleteButtonHandler }) => {
   console.log("inside expense");
@@ -32,7 +36,6 @@ const Expenses = ({ expenseArr, editButtonHandler, deleteButtonHandler }) => {
                 key={row.name}
                 sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
               >
-
                 <TableCell component="th" scope="row">
                   {row.amount}
                 </TableCell>
@@ -48,19 +51,21 @@ const Expenses = ({ expenseArr, editButtonHandler, deleteButtonHandler }) => {
                       gap: "10px",
                     }}
                   >
-                    <Button
-                      variant="contained"
+
+                    <IconButton
+                      color="error"
                       onClick={() => editButtonHandler(row)}
                     >
-                      Edit
-                    </Button>
-                    <Button
-                      variant="contained"
+                      <EditIcon 
+                        sx={{ color: "#1876d1" }}
+                       />
+                    </IconButton>
+                    <IconButton
                       color="error"
                       onClick={() => deleteButtonHandler(row?.Id)}
                     >
-                      Delete
-                    </Button>
+                      <DeleteIcon />
+                    </IconButton>
                   </Box>
                 </TableCell>
               </TableRow>
