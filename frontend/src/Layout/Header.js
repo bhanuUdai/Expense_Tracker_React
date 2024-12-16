@@ -10,7 +10,6 @@ import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
 import { NavLink, useHistory, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authAction } from "../store/auth-reducer";
@@ -20,6 +19,7 @@ import LightModeIcon from "@mui/icons-material/LightMode";
 import Switch from "@mui/material/Switch";
 import { themeAction } from "../store/theme-reducer";
 import { useSelector } from "react-redux";
+import appLogo from "../assets/images/logo.png";
 
 const pages = ["Home", "Expenses"];
 const settings = ["Profile", "Logout"];
@@ -71,7 +71,6 @@ function ResponsiveAppBar() {
     <AppBar position="fixed">
       <Container maxWidth="xxl">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -89,12 +88,12 @@ function ResponsiveAppBar() {
             {/* <IconButton>
               <ToggleOffIcon />
             </IconButton> */}
-            LOGO
+            <img src={appLogo} alt="logo" style={{ width: "50px", marginRight : "20px" }} />
           </Typography>
          {isLogin && <>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
+            {/* <IconButton
               size="large"
               aria-label="account of current user"
               aria-controls="menu-appbar"
@@ -103,7 +102,7 @@ function ResponsiveAppBar() {
               color="inherit"
             >
               <MenuIcon />
-            </IconButton>
+            </IconButton> */}
             <Menu
               id="menu-appbar"
               anchorEl={anchorElNav}
@@ -141,7 +140,6 @@ function ResponsiveAppBar() {
             </Menu>
           </Box>
 
-          <AdbIcon sx={{ display: { xs: "flex", md: "none" }, mr: 1 }} />
           <Typography
             variant="h5"
             noWrap
@@ -157,7 +155,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            LOGO
+            
           </Typography>
 
           <Box

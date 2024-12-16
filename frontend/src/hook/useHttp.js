@@ -1,9 +1,21 @@
 import axios from "axios";
 import { useState, useCallback } from "react";
+import { useHistory } from "react-router-dom/cjs/react-router-dom.min";
+import { useDispatch } from "react-redux";
+import { authAction } from "../store/auth-reducer";
 
 const useHttp = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+    const userlogOuthandler = () => {
+      dispatch(authAction.removeExpenseToken());
+      dispatch(authAction.removeUserEmail());
+      dispatch(authAction.setProjectId(""));
+      history.replace("/");
+    };
 
   const sendRequest = useCallback(async (requestConfig, resData) => {
     setError(null);
@@ -47,8 +59,14 @@ const useHttp = () => {
 
       resData(res);
     } catch (err) {
-      setError(err.response?.data?.error?.errors[0]?.message || err.response?.data?.detail||  err.message || "Something went wrong");
-      console.log(err); 
+      let errorMessage = (err.response?.data?.error?.errors[0]?.message || err.response?.data?.detail||  err.message || "Something went wrong");
+      console.log("errorMessage==>", errorMessage); 
+
+      if (errorMessage.toLowerCase().includes("token")) {
+        userlogOuthandler();
+        history.push("/");
+      }
+      setError(errorMessage);
     }finally{
       setLoading(false);
     }
