@@ -16,10 +16,14 @@ from corsheaders.defaults import default_headers
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+import dotenv
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+dotenv.load_dotenv(os.path.join(BASE_DIR, 'env'))
+
 
 
 # Quick-start development settings - unsuitable for production
@@ -142,11 +146,11 @@ WSGI_APPLICATION = 'mysite.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'expense_tracker',
-        'USER': 'udaibhanu',
-        'PASSWORD': 'Bhanu26',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
         'POOL_OPTIONS': {
             'POOL_SIZE': 10,
             'MAX_OVERFLOW': 10,

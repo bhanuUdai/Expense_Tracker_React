@@ -6,6 +6,8 @@ import Footer from "./Layout/Footer";
 import Loading from "./pages/UI/Loading";
 import Backdrop from "@mui/material/Backdrop";
 import GradientCircularBar from "./elements/GradientCircularBar";
+import CssBaseline from "@mui/material/CssBaseline";
+
 import {
   Box,
   Container,
@@ -24,8 +26,6 @@ const ForgetPassword = React.lazy(() => import("./pages/Auth/ForgetPassword"));
 const ExpensesForm = React.lazy(() => import("./pages/Expenses/ExpensesForm"));
 //const Footer=React.lazy(()=>import("./Layout/Footer"))
 
-
-
 function App() {
   // console.log('inside app function');
   const isLogin = useSelector((state) => state.auth.token);
@@ -36,15 +36,18 @@ function App() {
   const darkTheme = createTheme({
     palette: {
       mode: theme ? "dark" : "light",
+      background: {
+        default: theme ? "black" : "#f5f5f5", // Dark background for dark mode
+      },
     },
   });
   return (
     <ThemeProvider theme={darkTheme}>
-    <React.Fragment >
-      <main
+      <CssBaseline />
+      <Box
         style={{
           paddingTop: "64px",
-          background: premium && theme && isLogin ? "grey" : "white",
+          // background: premium && theme && isLogin ? "grey" : "white",
         }}
       >
         <Header />
@@ -89,9 +92,7 @@ function App() {
           </Switch>
         </Suspense>
         <Footer />
-      </main>
-    </React.Fragment>
-
+      </Box>
     </ThemeProvider>
   );
 }
