@@ -4,22 +4,17 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter } from "react-router-dom";
-import ContextProvier from "./store/ContextProvider";
+// import ContextProvier from "./store/ContextProvider";
 import { Provider } from "react-redux";
 import store from "./store/index";
-import { ThemeProvider } from "@mui/material";
-import theme from "./theme";
+
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
 
     <BrowserRouter>
-      <Provider store={store}>
-        <ContextProvier>
-          {/* <ThemeProvider theme={theme} > */}
+      <Provider store={store}>       
           <App />
-          {/* </ThemeProvider> */}
-        </ContextProvier>
       </Provider>
     </BrowserRouter>
 

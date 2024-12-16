@@ -47,8 +47,8 @@ const useHttp = () => {
 
       resData(res);
     } catch (err) {
-      setError(err.response?.data?.error?.errors[0]?.message || err.message || "Something went wrong");
-      console.log(err);
+      setError(err.response?.data?.error?.errors[0]?.message || err.response?.data?.detail||  err.message || "Something went wrong");
+      console.log(err); 
     }finally{
       setLoading(false);
     }

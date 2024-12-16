@@ -22,7 +22,7 @@ import { themeAction } from "../store/theme-reducer";
 import { useSelector } from "react-redux";
 
 const pages = ["Home", "Expenses"];
-const settings = ["Profile", "Account", "Dashboard", "Logout"];
+const settings = ["Profile", "Logout"];
 
 function ResponsiveAppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
@@ -32,6 +32,8 @@ function ResponsiveAppBar() {
   const dispatch = useDispatch();
   const location = useLocation();
   const projectId = location?.pathname?.split("/").pop();
+  const isLogin = useSelector((state) => state.auth.token);
+
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -50,8 +52,16 @@ function ResponsiveAppBar() {
 
   const handleCloseUserMenu = (key) => {
     setAnchorElUser(null);
-    if (key === "Logout") {
-      userlogOuthandler();
+    switch (key) {
+      case "Logout":
+        userlogOuthandler();
+        break;
+      case "Profile":
+        history.push(`/contact/${projectId}`);
+        break;
+    
+      default:
+        break;
     }
   };
 
@@ -81,6 +91,7 @@ function ResponsiveAppBar() {
             </IconButton> */}
             LOGO
           </Typography>
+         {isLogin && <>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
@@ -225,6 +236,7 @@ function ResponsiveAppBar() {
               ))}
             </Menu>
           </Box>
+          </>}
         </Toolbar>
       </Container>
     </AppBar>
