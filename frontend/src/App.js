@@ -33,14 +33,20 @@ function App() {
   const premium = useSelector((state) => state.expense.premiumButton);
   // console.log("isLogin==>",isLogin);
 
+
   const darkTheme = createTheme({
     palette: {
-      mode: theme ? "dark" : "light",
+      mode: theme ? "dark" : "light",  // ✅ Fix: Use "dark" or "light"
+      primary: {
+        main: "#1976d2", // ✅ Define primary color
+      },
       background: {
-        default: theme ? "black" : "#f5f5f5", // Dark background for dark mode
+        default: theme ? "#121212" : "#f5f5f5", // ✅ Dark mode default background
       },
     },
   });
+  
+
   return (
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
