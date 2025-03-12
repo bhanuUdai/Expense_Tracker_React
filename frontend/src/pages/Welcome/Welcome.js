@@ -17,6 +17,7 @@ const history = useHistory();
 const projectId = location.pathname.split('/').pop();
 const { error, sendRequest, loading } = useHttp();
 const [userDetails, setUserDetails] = useState([]);
+const [bgImageLoaded, setBgImageLoaded] = useState(false);
 
 
 const resData = (res)=>{
@@ -47,21 +48,29 @@ const getProfileDetails = () =>{
   }
 }
 
-useEffect(()=>{
-  getProfileDetails();
-},[])
+// useEffect(()=>{
+//   getProfileDetails();
+// },[]);
+
+  useEffect(() => {
+    const img = new Image();
+    img.src = "https://images.unsplash.com/photo-1723095469034-c3cf31e32730?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+    img.onload = () => setBgImageLoaded(true);
+    getProfileDetails();
+  }, []);
+
   return (
     <React.Fragment>
       <Box
         style={{
-          backgroundImage:
-            'url("https://images.unsplash.com/photo-1723095469034-c3cf31e32730?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")',
+          backgroundImage: bgImageLoaded ? 'url("https://images.unsplash.com/photo-1723095469034-c3cf31e32730?q=80&w=2940&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D")' : 'black',
           backgroundSize: "cover",
           backgroundPosition: "center",
           height: "calc(100vh - 64px)",
           display: "flex",
           alignItems: "center",
           flexDirection: "column",
+          transition: "background-image 0.5s ease-in-out",
         }}
       >
         <Typography variant="h4" gutterBottom color="white" fontWeight="bold" marginTop="20px">

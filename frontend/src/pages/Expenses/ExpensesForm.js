@@ -26,6 +26,7 @@ import { useLocation } from "react-router-dom/cjs/react-router-dom.min";
 import Toaster from "../../elements/Toaster";
 const ExpensesForm = () => {
   const expenseArr = useSelector((state) => state.expense.expenses);
+  const darkTheme = useSelector((state) => state.theme.theme); // Access the theme state
   const [isEditId, setIsEditId] = useState(null);
   const { error, sendRequest } = useHttp();
   const dispatch = useDispatch();
@@ -242,11 +243,15 @@ const ExpensesForm = () => {
   return (
     <Box
       sx={{
-        padding: "20px",
+        padding: "40px",
         minHeight: "calc(100vh - 104px)",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        backgroundColor: darkTheme ? "#333" : "#f5f5f5", // Conditional background color
+        color: darkTheme ? "#fff" : "#000", // Conditional text color
       }}
     >
-      {/* {error && <h1 className={classes.error_heading}>{`${error}!!! :(`}</h1>} */}
       <Toaster
         open={openSnackbar}
         onClose={handleCloseSnackbar}
@@ -256,9 +261,15 @@ const ExpensesForm = () => {
       <Box
         sx={{
           display: "flex",
-          flexDirection: "row",
-          gap: "20px",
-         
+          flexDirection: { xs: "column", md: "row" },
+          gap: "40px",
+          width: "100%",
+          maxWidth: "1200px",
+          margin: "0 auto",
+          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+          borderRadius: "8px",
+          backgroundColor: darkTheme ? "#444" : "white", // Conditional background color for form
+          padding: "20px",
         }}
       >
         <Box
@@ -267,11 +278,10 @@ const ExpensesForm = () => {
             flexDirection: "column",
             alignItems: "center",
             gap: "20px",
-            margin: "0px auto auto auto",
-            width: "80vw",
+            width: { xs: "100%", md: "100%" },
           }}
         >
-          <Typography variant="h5" fontWeight="bold" >
+          <Typography variant="h5" fontWeight="bold" color={darkTheme ? "secondary" : "primary"}>
             Expense Form
           </Typography>
 
@@ -306,7 +316,6 @@ const ExpensesForm = () => {
             defaultValue={category}
             onChange={(e) => setCategory(e.target.value)}
             value={category}
-            // helperText="Please select your currency"
           >
             {categoryList.map((option) => (
               <MenuItem key={option.value} value={option.value}>
@@ -327,21 +336,25 @@ const ExpensesForm = () => {
             <Button
               onClick={addExpenseHandler}
               variant="contained"
-              size="small"
+              size="medium"
+              sx={{ backgroundColor: "#1976d2", color: "white" }}
             >
               Submit
             </Button>
           </Box>
         </Box>
-        {expenseArr && expenseArr.length > 0 && <ExpenseDetails
-          expenseArr={expenseArr}
-          editButtonHandler={editButtonHandler}
-          deleteButtonHandler={deleteButtonHandler}
-        />}
+        {expenseArr && expenseArr.length > 0 && (
+          <ExpenseDetails
+            expenseArr={expenseArr}
+            editButtonHandler={editButtonHandler}
+            deleteButtonHandler={deleteButtonHandler}
+          />
+        )}
       </Box>
 
       {expenseArr.length > 0 && <ExpensePieChart expenseArr={expenseArr} />}
     </Box>
   );
 };
+
 export default ExpensesForm;
